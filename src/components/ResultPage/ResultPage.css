@@ -1,0 +1,55 @@
+.resultPage{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 4vh;
+    margin: 4vh;
+    color: black;
+    flex-grow: 4;
+}
+
+.resultBlock{
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    gap: 3vw;
+}
+
+.column {
+    margin: 8px;
+    height: 40vh;
+    width: 20vw;
+    flex-shrink: 0;
+    border: 1px solid;
+    border-radius: 32px;
+    background-color: white;
+}
+
+.columnHeader{
+    height: 10vh;
+    align-content: center;
+    color: white;
+    background-color: black;
+    border-radius: 32px 32px 0px 0px;
+}
+
+.droppableCol {
+    padding: 8px;
+    min-height: 100px;
+    /* background-color: red; */
+}
+
+.item {
+    padding: 8px;
+    margin-bottom: 4px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    background-color: lightgray;
+}
+
+.item.dragging {
+    background-color: lightblue;
+}

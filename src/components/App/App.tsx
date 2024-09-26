@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Input from "./Input";
-import Result from "./Result";
+import Input from "../InputPage/Input";
+import Result from "../ResultPage/ResultPage";
 
 function App() {
   return(

@@ -1,0 +1,49 @@
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const OpenAI = require('openai');
+const { TRIP_PROMPT } = require('./utils/constants.js');
+
+dotenv.config();
+
+const app = express();
+const port = 3000;
+
+app.use(express.json());
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,POST',
+    credentials: true
+}));
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.post('/api/itinerary', async (req, res) => {
+  const { city, duration } = req.body; 
+  const tripPrompt = TRIP_PROMPT
+        .replace("{city}", city)
+        .replace("{numberDays}", duration);
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: tripPrompt,
+        },
+      ],
+    });
+
+    const itinerary = completion.choices[0].message.content;
+    res.json({ itinerary });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
