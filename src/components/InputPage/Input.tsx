@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import './InputPage.css'
+import promptImage from '../../assets/Travel.png'
+
 
 function Input() {
     const navigate = useNavigate();
@@ -34,24 +37,29 @@ function Input() {
     };    
 
     return (
-        <>
-        <h1>Where are you going?</h1>
-        <form>
-            <input type="text" 
-            placeholder="type the city name"
-            name="city"
-            value={tripDetails.city}
-            onChange={handleTripDetails}/>
-            <input type="number" 
-            placeholder="type the trip`s duration"
-            name="duration"
-            min="1"
-            step="1" 
-            value={tripDetails.duration}
-            onChange={handleTripDetails}/>
-            <input type="submit" value="Submit" onClick={(e) => getItinerary(e)} />
-        </form>
-        </>
+        <div id='inputPage'>
+            <div className='promptContainer'>
+                <img src={promptImage} alt="" />
+                <div className='prompt'>
+                    <h1>Where are you going?</h1>
+                    <form>
+                        <input type="text" 
+                        placeholder="type the city name"
+                        name="city"
+                        value={tripDetails.city}
+                        onChange={handleTripDetails}/>
+                        <input type="number" 
+                        placeholder="type the trip`s duration"
+                        name="duration"
+                        min="1"
+                        step="1" 
+                        value={tripDetails.duration}
+                        onChange={handleTripDetails}/>
+                        <input type="submit" value="Submit" onClick={(e) => getItinerary(e)} className='submitButton'/>
+                    </form>
+                </div>
+            </div>
+        </div>
     )
 }
 

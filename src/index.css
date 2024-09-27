@@ -3,12 +3,14 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Rubik';
+  height: 100%;
+  width: 100%;
 }
 
 
-/* :root{
-  --blue-ligth: #8CC1FF;
+:root{
+  --main-blue-ligth: rgba(167, 195, 221, 1);
   --blue-dark: hsl(244, 100%, 26%);
   --blue-detail: #197EC0;
   --text-gray: #5E6282;
-} */
+}

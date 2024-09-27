@@ -56,7 +56,7 @@ function Result() {
 
     return (
         <div className='resultPage'>
-            <header>
+            <header className='background'>
                 <h1>Here is your itinerary, to {destinationCity}</h1>
             </header>
 

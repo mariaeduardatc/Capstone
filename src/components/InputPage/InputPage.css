@@ -1,0 +1,44 @@
+
+#inputPage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main-blue-ligth);
+}
+
+.promptContainer{
+    background-color: white;
+    display: flex;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 32px;
+    
+    img{
+        border-radius: 32px 0px 0px 32px;
+    }
+}
+
+.prompt{
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+    margin: 3vw;
+
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+
+        input{
+            border: 0;
+            background-color: rgba(167, 195, 221, 0.3);
+            padding: 1vh;
+            border-radius: 32px;
+        }
+
+        .submitButton{
+            background-color: var(--main-blue-ligth);
+            cursor: pointer;
+        }
+    }
+}
