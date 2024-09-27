@@ -3,8 +3,6 @@
     flex-direction: column;
     text-align: center;
     align-items: center;
-    gap: 4vh;
-    margin: 4vh;
     color: black;
     flex-grow: 4;
 }
@@ -14,42 +12,77 @@
     flex-wrap: wrap;
     overflow: hidden;
     justify-content: center;
-    align-items: center;
+    margin-top: 2vh;
     gap: 3vw;
 }
 
 .column {
-    margin: 8px;
-    height: 40vh;
-    width: 20vw;
+    min-height: 40vh;
+    min-width: 20vw;
+    height: fit-content;
+    width: fit-content;
     flex-shrink: 0;
-    border: 1px solid;
+    border: solid black;
+    border-width: 2px 4px 4px 2px;
     border-radius: 32px;
     background-color: white;
-}
 
-.columnHeader{
-    height: 10vh;
-    align-content: center;
-    color: white;
-    background-color: black;
-    border-radius: 32px 32px 0px 0px;
+    display: flex;
+    flex-direction: column;
+
+    .columnHeader{
+        height: 10vh;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+        color: white;
+        background-color: black;
+        border-radius: 29px 29px 0px 0px;
+
+        h3{
+            width: fit-content;
+            height: fit-content;
+        }
+    }
 }
 
 .droppableCol {
-    padding: 8px;
+    padding: 2%;
     min-height: 100px;
-    /* background-color: red; */
 }
 
 .item {
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 4px;
-    border: 1px solid lightgray;
-    border-radius: 4px;
-    background-color: lightgray;
+    border: solid black;
+    border-width: 1px 4px 4px 1px;
+    border-radius: 10px;
+    background-color: white;
 }
 
 .item.dragging {
-    background-color: lightblue;
+    background-color: var(--main-blue-ligth);
 }
+
+.background {
+    background-image: url('../../assets/headerImage.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 40vh;
+
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    h1{
+        background-color: rgba(255, 255, 255, 0.83);
+        border-radius: 32px;
+        padding: 1%;
+        display: flex;
+        width: fit-content;
+        height: fit-content;
+    }
+  }
+
