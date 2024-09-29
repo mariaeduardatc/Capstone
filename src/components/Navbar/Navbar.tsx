@@ -7,13 +7,19 @@ export default function Navbar() {
     const handleLandingPage = () => {
         navigate('/')
     }
+    const handleLogin = () => {
+        navigate('/login')
+    }
+    const handleRegistration = () => {
+        navigate('/register')
+    }
     return (
         <div id='navbar'>
             <header>
                 <button id='icon' onClick={handleLandingPage}><img src={icon} alt="" /></button>
                 <div>
-                    <button id='signup'>Sign Up</button>
-                    <button>Login</button>
+                    <button id='signup' onClick={handleRegistration}>Sign Up</button>
+                    <button onClick={handleLogin}>Login</button>
                 </div>
             </header>
         </div>
