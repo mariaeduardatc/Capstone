@@ -1,0 +1,121 @@
+*{
+    font-weight: 500;
+}
+
+#landingPage{
+    display: flex;
+    flex-direction: column;
+}
+
+#hero {
+    display: flex;
+    background-color: var(--main-blue-ligth);
+    align-items: center;
+    position: relative;
+
+    div {
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        z-index: 99;
+        padding: 3rem;
+
+        h1 {
+            color: white;
+            font-size: 4rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--blue-dark);
+        }
+
+        button {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            border: solid black;
+            border-width: 0px 4px 4px 0px;
+        }
+    }
+
+    #blueDecor {
+        position: absolute;
+        top: -10vh;
+        right: 0;
+        width: auto;
+        height: auto;
+        z-index: 0;
+    }
+}
+
+.triplePattern{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    gap: 1.5rem;
+    background-color: var(--main-blue-ligth);
+
+    h2{
+        color: var(--blue-dark);
+        font-size: 36px;
+    }
+
+    h4{
+        font-size: 20px;
+    }
+
+    h4, h5, p{
+        color: white;
+    }
+}
+
+.cardDeck{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5rem;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+
+    background-color: var(--blue-dark);
+    
+    margin: 3rem;
+    padding: 2rem;
+    height: 50vh;
+    width: 20%;
+    border-radius: 20px;
+    gap: 2rem;
+    
+    img{
+        width: fit-content;
+    }
+
+    h5{
+        font-size: 18spx;
+    }
+
+    p{
+        font-weight: 300;
+        font-size: 16px;
+        text-align: center;
+    }
+}
+
+#destinations{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3.5rem;
+    margin: 3rem;
+    img{
+        width: fit-content;
+    }
+}
