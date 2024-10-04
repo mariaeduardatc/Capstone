@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const OpenAI = require('openai');
-const { TRIP_PROMPT } = require('./utils/constants.js');
+const { TRIP_PROMPT } = require('./app/utils/constants');
+const UserRouter = require('./app/routers/userRouters')
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(cors({
     methods: 'GET,POST',
     credentials: true
 }));
+
+app.use('/user', UserRouter);
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

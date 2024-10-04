@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--main-blue-ligth);
+    height: 90vh;
 }
 
 .promptContainer{
@@ -11,6 +12,9 @@
     display: flex;
     height: fit-content;
     width: fit-content;
+    border-right: solid;
+    border-bottom: solid;
+    border-width: 4px;
     border-radius: 32px;
     
     img{
@@ -23,6 +27,7 @@
     flex-direction: column;
     gap: 5vh;
     margin: 3vw;
+    
 
     form{
         display: flex;
@@ -38,7 +43,6 @@
 
         .submitButton{
             background-color: var(--main-blue-ligth);
-            cursor: pointer;
         }
     }
 }
