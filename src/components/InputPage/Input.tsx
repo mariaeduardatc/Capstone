@@ -49,7 +49,7 @@ function Input() {
                         value={tripDetails.city}
                         onChange={handleTripDetails}/>
                         <input type="number" 
-                        placeholder="type the trip`s duration"
+                        placeholder="number of days"
                         name="duration"
                         min="1"
                         step="1" 

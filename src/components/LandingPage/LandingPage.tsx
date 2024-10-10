@@ -31,7 +31,7 @@ function LandingPage() {
             <div className='triplePattern'>
                 <h4>Create your Itinerary</h4>
                 <h2>How to get started on your journey</h2>
-                <div className='cardDeck'>
+                <div className='cardDeck' id='settings'>
                     <div className='card'>
                         <img src={smallPlane} alt="" />
                         <h5>Inform the details of your trip</h5>

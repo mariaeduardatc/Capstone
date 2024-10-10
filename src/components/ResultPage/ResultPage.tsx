@@ -78,9 +78,7 @@ function Result() {
                                             className="droppableCol"
                                         >
                                             {data.places.map((el, index) => {
-                                                console.log(el.id, index)
                                                 const draggableId = el.id != null ? el.id.toString() : index.toString();
-                                                console.log('dragid', draggableId)
                                                 return (
                                                     <Draggable
                                                         key={draggableId}
