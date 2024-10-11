@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable, DraggableLocation } from "react-beautiful-dnd";
 import _ from "lodash";
 import './ResultPage.css'
@@ -12,7 +12,13 @@ function Result() {
         };
     }
 
+    interface Errors {
+        prompt?: string;
+        // Add other error properties if needed
+    }
+
     const location = useLocation();
+    const navigate = useNavigate();
     const itinerary = typeof location.state.response === 'string'
         ? JSON.parse(location.state.response)
         : location.state.response
@@ -31,6 +37,7 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
+    const [errors, setErrors] = useState<Errors>({});
 
     const handleDragEnd = ({ destination, source }: { destination: any, source: DraggableLocation }) => {
         if (!destination) {
@@ -53,6 +60,18 @@ function Result() {
             return prev
         })
     }
+
+    const handleMapsDirections = async (dayKey: string) => {
+        const places = state[dayKey].places.map((place) => place.name);
+
+        if (places.length < 2) {
+            setErrors((e) => ({ ...e, prompt: "At least two places are required to generate directions." }));
+            return;
+        }
+
+        navigate('/routeDirections', { state: { places: places } })
+
+    };
 
     return (
         <div className='resultPage'>
@@ -102,6 +121,7 @@ function Result() {
                                         </div>
                                     )}
                                 </Droppable>
+                                <button onClick={() => handleMapsDirections(key)}>Generate directions</button>
                             </div>
                         ))}
                     </DragDropContext>

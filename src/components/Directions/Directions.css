@@ -1,0 +1,10 @@
+/* Ensure your CSS has proper styling */
+.directions-container {
+    height: 100vh; /* Full viewport height */
+    width: 100%;   /* Full width */
+}
+
+.map {
+    height: 100%; /* Map should fill the container */
+    width: 100%;
+}
