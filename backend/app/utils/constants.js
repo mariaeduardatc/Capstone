@@ -1,5 +1,5 @@
 const TRIP_PROMPT = `Give me a list of places to visit in {city}, for a trip of {numberDays} days. Please divide the places per day, and return me a string that follows 
-  the structure I provided below. Provide me between 3-4 activities per day. Example format for a case with 2 days(if there are more than 2 days 
+  the structure I provided below. Provide me strictly between 3-4 activities per day, no less. Group the activities based on their walking distance (put the closest on the same day). Example format for a case with 2 days(if there are more than 2 days 
   just add it with the same format and if it's 1 day show only one day). Return a valid json with the format below (I used San Francisco as an example): 
   
   {

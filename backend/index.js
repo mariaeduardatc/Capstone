@@ -3,7 +3,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const OpenAI = require('openai');
 const { TRIP_PROMPT } = require('./app/utils/constants');
-const UserRouter = require('./app/routers/userRouters')
+const UserRouter = require('./app/routers/userRouters');
+const APIRouter = require('./app/routers/APIRouters');
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -19,6 +21,8 @@ app.use(cors({
 }));
 
 app.use('/user', UserRouter);
+
+app.use('/api/maps', APIRouter);
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
