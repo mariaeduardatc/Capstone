@@ -5,6 +5,18 @@ import { useState } from 'react'
 import APIClient from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 
+interface ApiResponse{
+  ok: boolean;
+  status: number;
+  body: {
+    data?: object;
+    error?: {
+      message: string;
+      status: number;
+    }
+  }
+}
+
 export default function RegisterPage() {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
@@ -16,21 +28,8 @@ export default function RegisterPage() {
         confirmPassword: ''
     })
 
-    interface ApiResponse{
-        ok: boolean;
-        status: number;
-        body: {
-          data?: object;
-          error?: {
-            message: string;
-            status: number;
-          }
-        }
-      }
-
     const handleInput = (e: {target: {name: string, value:string}}) => {
         const { name, value } = e.target;
-        console.log('handleInput', name, value)
         setInput((prevUser) => ({
             ...prevUser,
             [name]: value,
@@ -38,7 +37,6 @@ export default function RegisterPage() {
     }
 
     async function postAPICall(info: object) : Promise<ApiResponse>{
-      console.log('postAPIcall')
         const apiClient = new APIClient();
         const userRoute = '/user/register';
         const response = await apiClient.post(userRoute, info, {});
@@ -47,7 +45,6 @@ export default function RegisterPage() {
   
       const registerUser = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('inside registerUser', input)
           if (
             input.firstName === "" ||
             input.lastName== "" ||
@@ -56,24 +53,20 @@ export default function RegisterPage() {
             input.confirmPassword == ""
             
           ) {
-            console.log('err1')
             setErrors((e) => ({ ...e, prompt: "Fill all sections" }));
             // setIsLoading(false);
             return;
           } else if(input.password != input.confirmPassword) {
-            console.log('err2')
             setErrors((e) => ({ ...e, prompt: "Passwords do not match" }));
             // setIsLoading(false);
             return;
           }
            else {
-            console.log('err3')
             setErrors((e) => ({ ...e, prompt: ""}));
           }
       
           try {
             // setIsLoading(true);
-            console.log('inside try response input')
             const responseInput = {
               firstName: input.firstName,
               lastName: input.lastName,
@@ -82,7 +75,6 @@ export default function RegisterPage() {
             }
 
             const res = await postAPICall(responseInput);
-            console.log('API Response:', res);
             
           if (res?.status === 200 ) {
             //   setIsLoading(false);

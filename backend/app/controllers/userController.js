@@ -9,7 +9,6 @@ class UserController {
     }
 
     processLogout = asyncHandler(async (req, res) => {
-        // Optionally, you can handle session destruction or user logout logic here
         res.status(200).json({ message: "Successfully logged out." });
     });
 
@@ -29,14 +28,12 @@ class UserController {
         const userInterface = req.body;
         console.log('Registering user:', userInterface);
         const registerResponse = await this.userModel.register(userInterface);
-        // You can set a session here if you're using session-based authentication
         res.status(200).json(registerResponse);
     });
 
     processLogin = asyncHandler(async (req, res) => {
         const userInterface = req.body;
         const loginResponse = await this.userModel.login(userInterface);
-        // You can set a session here if you're using session-based authentication
         res.status(200).json(loginResponse);
     });
 }
