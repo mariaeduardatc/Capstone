@@ -21,7 +21,7 @@ export default function Directions() {
                     defaultCenter={position}
                     defaultZoom={12}
                     mapId={mapId}
-                    fullscreenControl={true}
+                    fullscreenControl={false}
                     gestureHandling={'auto'}
                     zoomControl={true}
                     >
@@ -37,25 +37,30 @@ function DirectionsRoute({ setPosition }: { setPosition: (pos: { lat: number, ln
     const map = useMap()
     const routesLibrary = useMapsLibrary("routes")
     const geocoderLibrary = useMapsLibrary("geocoding");
+
     const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService>()
     const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer>()
     const [routes, setRoutes] = useState<google.maps.DirectionsRoute[]>([])
-    const [routeIndex, setRouteIndex] = useState(0)
-    const selected = routes[routeIndex]
+
+    const selected = routes[0]
     const leg = selected?.legs[0]
 
     const location = useLocation();
     const places = location.state?.places || [];
-    const origin = places[0];
-    const destination = places[places.length - 1];
-    const waypoints = places.slice(1, places.length - 1).map((location: string) => ({ location, stopover: true }));
+    const destinationCity = location.state?.destinationCity || '';
+    const placesWithCity = places.map((place:string) => `${place}, ${destinationCity}`);
+    const origin = placesWithCity[0];
+    const destination = placesWithCity[places.length - 1];
+    const waypoints = placesWithCity.slice(1, placesWithCity.length - 1).map((location: string) => ({ location, stopover: true }));
 
+    // hook to initialize services
     useEffect(() => {
         if(!routesLibrary || !map) return
         setDirectionsService(new routesLibrary.DirectionsService())
         setDirectionsRenderer(new routesLibrary.DirectionsRenderer({ map }))
     }, [routesLibrary, map])
 
+    // hook to find routes using the services
     useEffect(() => {
         if (!directionsService || !directionsRenderer) return;
 
@@ -83,30 +88,13 @@ function DirectionsRoute({ setPosition }: { setPosition: (pos: { lat: number, ln
         }
     }, [directionsService, directionsRenderer])
 
-    useEffect(() => {
-        if (!directionsRenderer) return
-        directionsRenderer.setRouteIndex(routeIndex)
-    }, [routeIndex, directionsRenderer])
-
     if (!leg) return null
 
     return (
         <div className='directions'>
-            <h2>{selected.summary}</h2>
             <p>{leg.start_address.split(",")[0]} to {leg.end_address.split(",")[0]}</p>
             <p>Distance: {leg.distance?.text}</p>
             <p>Duration: {leg.duration?.text}</p>
-
-            <h2>Other Routes</h2>
-            <ul>
-                {routes.map((route, index) => (
-                    <li key={route.summary}>
-                        <button onClick={() => setRouteIndex(index)}>
-                            {route.summary}
-                        </button>
-                    </li>
-                ))}
-            </ul>
         </div>
     )
 

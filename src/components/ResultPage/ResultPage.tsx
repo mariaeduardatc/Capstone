@@ -69,7 +69,7 @@ function Result() {
             return;
         }
 
-        navigate('/routeDirections', { state: { places: places } })
+        navigate('/routeDirections', { state: { places: places, destinationCity: destinationCity  } })
 
     };
 

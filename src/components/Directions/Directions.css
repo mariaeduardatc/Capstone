@@ -1,10 +1,30 @@
-/* Ensure your CSS has proper styling */
 .directions-container {
     height: 100vh; /* Full viewport height */
     width: 100%;   /* Full width */
+    position: fixed;
 }
 
 .map {
     height: 100%; /* Map should fill the container */
     width: 100%;
+
+}
+
+.directions{
+    position: relative;
+    z-index: 1;
+    top: -95vh;
+    left: 75vw;
+    color: white;
+    background-color: #004169cf;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+
+    button{
+        background-color: transparent;
+        color: white;
+        text-decoration: underline;
+    }
 }

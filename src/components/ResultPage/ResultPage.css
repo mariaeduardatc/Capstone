@@ -29,6 +29,7 @@
 
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     .columnHeader{
         height: 10vh;
@@ -45,6 +46,14 @@
             width: fit-content;
             height: fit-content;
         }
+    }
+
+    button{
+        background-color: var(--main-blue-ligth);
+        padding: 10px;
+        border: solid black;
+        border-width: 1px 4px 4px 1px;
+        border-radius: 10px;
     }
 }
 
@@ -67,7 +76,7 @@
 }
 
 .background {
-    background-image: url('../../assets/headerImage.jpeg');
+    background-color: var(--main-blue-ligth);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
