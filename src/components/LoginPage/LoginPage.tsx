@@ -1,9 +1,10 @@
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthenticatedUserContext } from '../App/App';
 import '../InputPage/InputPage.css'
 import './LoginPage.css'
 import APIClient from '../../api/client';
 import loginPlane from '../../assets/loginPlane.svg'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface ApiResponse {
     ok: boolean;
@@ -20,10 +21,11 @@ interface ApiResponse {
 interface Errors {
     prompt?: string;
     // Add other error properties if needed
-  }
+}
 
 export default function LoginPage() {
     const navigate = useNavigate();
+    const { setIsAuthenticated } = useContext(AuthenticatedUserContext);
     const [errors, setErrors] = useState<Errors>({});
     const [input, setInput] = useState({
         email: "",
@@ -31,7 +33,6 @@ export default function LoginPage() {
     });
 
     const handleInput = (e: { target: { name: string; value: string } }) => {
-        console.log('inside input handler')
         if (e.target.name === "email") {
             if (e.target.value.indexOf("@") === -1) {
                 setErrors((e) => ({ ...e, email: "Please enter a valid email." }));
@@ -47,7 +48,6 @@ export default function LoginPage() {
     };
 
     async function postAPICall(info: object): Promise<ApiResponse> {
-        console.log('inside')
         const apiClient = new APIClient();
         const userRoute = "/user/login";
         const response = await apiClient.post(userRoute, info, {});
@@ -67,7 +67,8 @@ export default function LoginPage() {
             const res = await postAPICall(input);
 
             if (res?.status === 200) {
-                navigate("/", { state: { response: res.body } });
+                setIsAuthenticated(res.body);
+                navigate("/userpage", { state: { response: res.body } });
             } else {
                 setErrors((e) => ({
                     ...e,

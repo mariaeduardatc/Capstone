@@ -21,6 +21,7 @@
     "node-fetch": "^3.3.2",
     "openai": "^4.61.0",
     "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.13.0"
   },
   "devDependencies": {

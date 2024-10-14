@@ -1,9 +1,10 @@
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { AuthenticatedUserContext } from '../App/App';
 import '../InputPage/InputPage.css'
 import './RegisterPage.css'
 import loginPlane from '../../assets/loginPlane.svg'
-import { useState } from 'react'
 import APIClient from '../../api/client';
-import { useNavigate } from 'react-router-dom';
 
 interface ApiResponse{
   ok: boolean;
@@ -20,6 +21,7 @@ interface ApiResponse{
 export default function RegisterPage() {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
+    const {setIsAuthenticated} = useContext(AuthenticatedUserContext);
     const [input, setInput] = useState({
         firstName: '',
         lastName: '',
@@ -78,9 +80,8 @@ export default function RegisterPage() {
             
           if (res?.status === 200 ) {
             //   setIsLoading(false);
-            //   setIsAuthenticated(res.body);
-            console.log('inside success')
-              // navigate("/");
+              setIsAuthenticated(res.body);
+              navigate("/userpage");
             } else {
               setErrors((e) => ({
                 ...e,

@@ -1,45 +1,40 @@
 #navbar{
-    width: auto;
-    height: fit-content;
     background-color: var(--main-blue-ligth);
     position: relative;
-}
-
-#icon{
-    background-color: transparent;
-    border: none;
-    width: fit-content;
-}
-
-header{
     display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 3vh;
+    
     img{
         width: 6vw;
-        height: 4vh;
         align-items: flex-start;
     }
+}
 
-    div{
-        height: fit-content;
-        justify-content: flex-end;
-        display: flex;
-        gap: 2vh;
-    }
-
+.instructionButtons{
+    width: fit-content;
+    margin-left: auto;
+    display: flex;
+    gap: 2vw;
+    
     button{
-        width: 6%;
+        width: calc(2em*3);
         height: 4vh;
         font-weight: 500;
         color: white;
         background-color: var(--blue-detail);
         border: 1px solid white;
         border-radius: 5px;
+        position: relative;
         z-index: 999;
     }
-    #signup{
+
+    .darkButton{
         background-color: var(--blue-dark);
     }
+}
+
+.icon{
+    background-color: transparent;
+    border: none;
+    width: fit-content;
 }
