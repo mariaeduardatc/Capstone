@@ -1,10 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const passport = require('passport')
 const OpenAI = require('openai');
 const { TRIP_PROMPT } = require('./app/utils/constants');
 const UserRouter = require('./app/routers/userRouters');
 const APIRouter = require('./app/routers/APIRouters');
+const authenticationMiddleware = require('./app/middlewares/authMiddleware')
 
 dotenv.config();
 
@@ -13,7 +15,6 @@ const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cors({
     origin: 'http://localhost:5173',
     methods: 'GET,POST',
@@ -21,8 +22,10 @@ app.use(cors({
 }));
 
 app.use('/user', UserRouter);
-
 app.use('/api/maps', APIRouter);
+
+passport.use('jwt', authenticationMiddleware.jwtStrategy);
+app.use(authenticationMiddleware.authenticateRequest);
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
