@@ -9,6 +9,7 @@ import RegisterPage from "../RegisterPage/RegisterPage";
 import UserPage from "../UserPage/UserPage";
 import Directions from "../Directions/Directions";
 import APIClient from "../../api/client";
+import LoadingPage from "../LoadingPage/LoadingPage";
 
 export const AuthenticatedUserContext = createContext<any>(null);
 export const LoadingContext = createContext<any>(null);
@@ -31,6 +32,9 @@ function App() {
     cookieLogin();
   }, []);
 
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   return (
     <div className="app">
       <AuthenticatedUserContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
@@ -46,7 +50,6 @@ function App() {
               {/* <Route path="/userpage" element={<UserPage />} /> */}
               <Route path="/routeDirections" element={<Directions />} />
               {(isAuthenticated) ? <Route path="/userpage" element={<UserPage />} /> : null}
-              {(isLoading) ? <Route path="/" element={<LandingPage/>} /> : null}
             </Routes>
           </BrowserRouter>
         </LoadingContext.Provider>

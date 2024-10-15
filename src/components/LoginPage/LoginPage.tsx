@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthenticatedUserContext } from '../App/App';
+import { AuthenticatedUserContext, LoadingContext } from '../App/App';
 import '../InputPage/InputPage.css'
 import './LoginPage.css'
 import APIClient from '../../api/client';
@@ -26,6 +26,7 @@ interface Errors {
 export default function LoginPage() {
     const navigate = useNavigate();
     const { setIsAuthenticated } = useContext(AuthenticatedUserContext);
+    const { setIsLoading } = useContext(LoadingContext);
     const [errors, setErrors] = useState<Errors>({});
     const [input, setInput] = useState({
         email: "",
@@ -64,18 +65,22 @@ export default function LoginPage() {
         }
 
         try {
+            setIsLoading(true);
             const res = await postAPICall(input);
 
             if (res?.status === 200) {
+                setIsLoading(false);
                 setIsAuthenticated(res.body);
                 navigate("/userpage", { state: { response: res.body } });
             } else {
+                setIsLoading(false);
                 setErrors((e) => ({
                     ...e,
                     prompt: res.body.error?.message,
                 }));
             }
         } catch (err) {
+            setIsLoading(false);
             setErrors((e) => ({
                 ...e,
                 prompt: String(err),

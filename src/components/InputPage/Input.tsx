@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 import './InputPage.css'
 import promptImage from '../../assets/Travel.png'
 import { LoadingContext } from '../App/App';
@@ -46,7 +45,7 @@ function Input() {
         event.preventDefault();
 
         try {
-            // setIsLoading(true);
+            setIsLoading(true);
             const prompt = {
                 city: tripDetails.city,
                 duration: tripDetails.duration
@@ -54,11 +53,12 @@ function Input() {
             const res = await postAPICall(prompt);
 
             if (res?.body) {
+                setIsLoading(false);
                 navigate("/result", { state: { response: res.body, city: tripDetails.city, days: tripDetails.duration } });
             }
             
         } catch (err) {
-            // setIsLoading(false);
+            setIsLoading(false);
             console.error('err', err);
         }
     };

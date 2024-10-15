@@ -22,6 +22,7 @@ export default function RegisterPage() {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const {setIsAuthenticated} = useContext(AuthenticatedUserContext);
+    const { setIsLoading } = useContext(LoadingContext);
     const [input, setInput] = useState({
         firstName: '',
         lastName: '',
@@ -56,11 +57,11 @@ export default function RegisterPage() {
             
           ) {
             setErrors((e) => ({ ...e, prompt: "Fill all sections" }));
-            // setIsLoading(false);
+            setIsLoading(false);
             return;
           } else if(input.password != input.confirmPassword) {
             setErrors((e) => ({ ...e, prompt: "Passwords do not match" }));
-            // setIsLoading(false);
+            setIsLoading(false);
             return;
           }
            else {
@@ -68,7 +69,7 @@ export default function RegisterPage() {
           }
       
           try {
-            // setIsLoading(true);
+            setIsLoading(true);
             const responseInput = {
               firstName: input.firstName,
               lastName: input.lastName,
@@ -79,7 +80,7 @@ export default function RegisterPage() {
             const res = await postAPICall(responseInput);
             
           if (res?.status === 200 ) {
-            //   setIsLoading(false);
+              setIsLoading(false);
               setIsAuthenticated(res.body);
               navigate("/userpage");
             } else {
@@ -87,7 +88,7 @@ export default function RegisterPage() {
                 ...e,
                 prompt: res.body.error?.message,
               }));
-            //   setIsLoading(false);
+              setIsLoading(false);
             }
           } catch (err) {
             console.log(err);
@@ -95,7 +96,7 @@ export default function RegisterPage() {
               ...e,
               prompt: String(err),
             }));
-            // setIsLoading(false);
+            setIsLoading(false);
           }
         };
 

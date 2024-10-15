@@ -1,0 +1,13 @@
+#loading{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--blue-dark);
+    background-color: var(--main-blue-ligth);
+    height: 100vh;
+
+    img{
+        width: 30vw;
+    }
+}
