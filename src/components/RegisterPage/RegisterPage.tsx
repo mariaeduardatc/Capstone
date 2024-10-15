@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { AuthenticatedUserContext } from '../App/App';
+import { AuthenticatedUserContext, LoadingContext } from '../App/App';
 import '../InputPage/InputPage.css'
 import './RegisterPage.css'
 import loginPlane from '../../assets/loginPlane.svg'
