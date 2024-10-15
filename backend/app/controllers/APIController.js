@@ -1,21 +1,17 @@
 const asyncHandler = require('express-async-handler');
 const APIModel = require('../models/APIModel');
 
-class MapsController {
+class APIController {
     constructor() {
-        this.mapsModel = new APIModel();
+        this.apiModel = new APIModel();
     }
 
-    getDirections = asyncHandler(async (req, res) => {
-        const { places } = req.body;
-
-        try {
-            const directionsData = await this.mapsModel.getDirectionsFromGoogleMaps(places);
-            return res.status(200).json(directionsData);
-        } catch (error) {
-            return res.status(500).json({ message: error.message });
-        }
+    processPromptCompletion = asyncHandler(async (req, res, _next) => {
+        const tripParams = req.body;
+        const completionResponse = await this.apiModel.generateChatPrompt(tripParams);
+        const completionOutput = completionResponse?.choices[0].message.content;
+        res.status(200).send(completionOutput);
     });
 }
 
-module.exports = MapsController;
+module.exports = APIController;

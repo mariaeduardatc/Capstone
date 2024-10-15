@@ -1,9 +1,9 @@
 const express = require('express');
-const router = express.Router();
+const apiRouter = express.Router();
 const APIController = require('../controllers/APIController');
 
-const mapsController = new APIController();
+const apiController = new APIController();
 
-router.post('/directions', mapsController.getDirections);
+apiRouter.post('/itinerary', apiController.processPromptCompletion)
 
-module.exports = router;
+module.exports = apiRouter;

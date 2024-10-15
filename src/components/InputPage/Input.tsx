@@ -1,40 +1,67 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './InputPage.css'
 import promptImage from '../../assets/Travel.png'
+import { LoadingContext } from '../App/App';
+import APIClient from '../../api/client';
 
+interface ApiResponse {
+    ok: boolean;
+    status: number;
+    body: {
+        data?: object;
+        error?: {
+            message: string;
+            status: number;
+        }
+    }
+}
 
 function Input() {
     const navigate = useNavigate();
-
+    const { setIsLoading } = useContext(LoadingContext);
     const [tripDetails, setTripDetails] = useState({
         city: '',
         duration: ''
-    })
+    });
 
     function handleTripDetails(e: { target: any }) {
         const { name, value } = e.target;
         setTripDetails((prevUser) => ({
-        ...prevUser,
-        [name]: value,
+            ...prevUser,
+            [name]: value,
         }));
+    }
+
+
+    async function postAPICall(prompt: object): Promise<ApiResponse> {
+        const apiClient = new APIClient();
+        const apiRoute = '/api/itinerary';
+        const response = await apiClient.post(apiRoute, prompt, {});
+        return response;
     }
 
     const getItinerary = async (event: React.FormEvent) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3000/api/itinerary', {
+            // setIsLoading(true);
+            const prompt = {
                 city: tripDetails.city,
                 duration: tripDetails.duration
-            });
-            const itinerary = response.data.itinerary;
-            navigate("/result", { state: { response: itinerary, city: tripDetails.city, days: tripDetails.duration } });
+            };
+            const res = await postAPICall(prompt);
+
+            if (res?.body) {
+                navigate("/result", { state: { response: res.body, city: tripDetails.city, days: tripDetails.duration } });
+            }
+            
         } catch (err) {
-            console.error(err);
+            // setIsLoading(false);
+            console.error('err', err);
         }
-    };    
+    };
 
     return (
         <div id='inputPage'>
@@ -43,19 +70,19 @@ function Input() {
                 <div className='prompt'>
                     <h1>Where are you going?</h1>
                     <form>
-                        <input type="text" 
-                        placeholder="type the city name"
-                        name="city"
-                        value={tripDetails.city}
-                        onChange={handleTripDetails}/>
-                        <input type="number" 
-                        placeholder="number of days"
-                        name="duration"
-                        min="1"
-                        step="1" 
-                        value={tripDetails.duration}
-                        onChange={handleTripDetails}/>
-                        <input type="submit" value="Submit" onClick={(e) => getItinerary(e)} className='submitButton'/>
+                        <input type="text"
+                            placeholder="type the city name"
+                            name="city"
+                            value={tripDetails.city}
+                            onChange={handleTripDetails} />
+                        <input type="number"
+                            placeholder="number of days"
+                            name="duration"
+                            min="1"
+                            step="1"
+                            value={tripDetails.duration}
+                            onChange={handleTripDetails} />
+                        <input type="submit" value="Submit" onClick={(e) => getItinerary(e)} className='submitButton' />
                     </form>
                 </div>
             </div>

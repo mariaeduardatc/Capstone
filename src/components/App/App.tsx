@@ -11,10 +11,12 @@ import Directions from "../Directions/Directions";
 import APIClient from "../../api/client";
 
 export const AuthenticatedUserContext = createContext<any>(null);
+export const LoadingContext = createContext<any>(null);
 
 function App() {
   const hideNavbar = location.pathname === '/routeDirections';
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function cookieLogin() {
@@ -23,29 +25,31 @@ function App() {
       if (response.ok) {
         const userObject = response.body;
         setIsAuthenticated(userObject);
-        console.log('test',isAuthenticated, userObject)
       }
 
     }
     cookieLogin();
-  }, [isAuthenticated]);
+  }, []);
 
   return (
     <div className="app">
       <AuthenticatedUserContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <BrowserRouter>
-          {!hideNavbar && <Navbar />}
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/prompt" element={<Input />} />
-            <Route path="/result" element={<Result />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            {/* <Route path="/userpage" element={<UserPage />} /> */}
-            <Route path="/routeDirections" element={<Directions />} />
-            { (isAuthenticated) ? <Route path="/userpage" element={<UserPage />} /> : null }
-          </Routes>
-        </BrowserRouter>
+        <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+          <BrowserRouter>
+            {!hideNavbar && <Navbar />}
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/prompt" element={<Input />} />
+              <Route path="/result" element={<Result />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              {/* <Route path="/userpage" element={<UserPage />} /> */}
+              <Route path="/routeDirections" element={<Directions />} />
+              {(isAuthenticated) ? <Route path="/userpage" element={<UserPage />} /> : null}
+              {(isLoading) ? <Route path="/" element={<LandingPage/>} /> : null}
+            </Routes>
+          </BrowserRouter>
+        </LoadingContext.Provider>
       </AuthenticatedUserContext.Provider>
     </div>
   )
