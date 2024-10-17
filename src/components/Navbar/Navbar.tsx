@@ -7,7 +7,7 @@ import APIClient from '../../api/client';
 
 export default function Navbar() {
     const { isAuthenticated } = useContext(AuthenticatedUserContext)
-    
+
     async function handleLogout() {
         const apiClient = new APIClient();
         const apiRoute = '/user/logout';

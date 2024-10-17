@@ -1,25 +1,24 @@
-#navbar{
+#navbar {
     background-color: var(--main-blue-ligth);
     position: relative;
     display: flex;
     padding: 3vh;
-    
-    img{
+
+    img {
         width: 6vw;
         align-items: flex-start;
     }
 }
 
-.instructionButtons{
+.instructionButtons {
     width: fit-content;
     margin-left: auto;
     display: flex;
     gap: 2vw;
-    
-    button{
+
+    button {
         width: calc(2em*3);
         height: 4vh;
-        font-weight: 500;
         color: white;
         background-color: var(--blue-detail);
         border: 1px solid white;
@@ -28,12 +27,12 @@
         z-index: 999;
     }
 
-    .darkButton{
+    .darkButton {
         background-color: var(--blue-dark);
     }
 }
 
-.icon{
+.icon {
     background-color: transparent;
     border: none;
     width: fit-content;

@@ -25,8 +25,8 @@ class User {
     await this.insertUserIntoDatabase({ ...creds, password: hashedPassword });
     const userObj = await this.retrieveUserObjByEmail(creds.email);
     return userObj;
-  } 
-  
+  }
+
   notEmptyCreds(creds) {
     const areEmpty = Object.values(creds).some((cred) => !cred);
     if (areEmpty) {
@@ -50,6 +50,14 @@ class User {
     const isValid = emailRegex.test(email);
     if (!isValid) {
       throw new BadRequestError('Email is not in a valid format.');
+    }
+  }
+
+  isValidPassword(password) {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{7,}$/;
+    const isValid = passwordRegex.test(password);
+    if (!isValid) {
+      throw new BadRequestError('Password must be at least 7 characters long, with one special character and one uppercase letter.');
     }
   }
 
@@ -115,4 +123,4 @@ class User {
   }
 }
 
-module.exports =  User;
+module.exports = User;

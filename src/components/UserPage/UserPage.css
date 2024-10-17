@@ -1,8 +1,8 @@
-#userpage{
+#userpage {
     height: 80vh;
 }
 
-#userpage header{
+#userpage header {
     background-color: var(--main-blue-ligth);
     color: white;
     display: flex;
@@ -11,32 +11,32 @@
     z-index: 1;
     height: 35vh;
 
-    h2{
+    h2 {
         color: var(--blue-dark);
     }
 }
 
-#userpage .tripPattern{
+#userpage .tripPattern {
     background-color: transparent;
     position: absolute;
     top: 35vh;
 }
 
-#userpage .cardDeck{
+#userpage .cardDeck {
     justify-content: left;
     margin-bottom: 0;
 }
 
-#userpageDeck .card{
+#userpageDeck .card {
     background-color: white;
     width: 30%;
     border: solid var(--blue-dark);
-    border-width: 0px 4px 4px 0px ;
+    border-width: 0px 4px 4px 0px;
     display: flex;
     flex-direction: column;
     align-items: baseline;
 
-    h5{
+    h5 {
         color: rgba(0, 0, 0, 0.52);
     }
 }

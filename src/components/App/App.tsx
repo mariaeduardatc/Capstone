@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { createContext, useEffect, useState } from "react";
-import Input from "../InputPage/Input";
 import Result from "../ResultPage/ResultPage";
 import LandingPage from "../LandingPage/LandingPage";
 import Navbar from "../Navbar/Navbar";
@@ -10,6 +9,7 @@ import UserPage from "../UserPage/UserPage";
 import Directions from "../Directions/Directions";
 import APIClient from "../../api/client";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import InputPage from "../InputPage/InputPage";
 
 export const AuthenticatedUserContext = createContext<any>(null);
 export const LoadingContext = createContext<any>(null);
@@ -43,7 +43,7 @@ function App() {
             {!hideNavbar && <Navbar />}
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/prompt" element={<Input />} />
+              <Route path="/prompt" element={<InputPage />} />
               <Route path="/result" element={<Result />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />

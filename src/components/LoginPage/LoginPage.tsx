@@ -5,23 +5,8 @@ import '../InputPage/InputPage.css'
 import './LoginPage.css'
 import APIClient from '../../api/client';
 import loginPlane from '../../assets/loginPlane.svg'
-
-interface ApiResponse {
-    ok: boolean;
-    status: number;
-    body: {
-        data?: object;
-        error?: {
-            message: string;
-            status: number;
-        };
-    };
-}
-
-interface Errors {
-    prompt?: string;
-    // Add other error properties if needed
-}
+import { ApiResponse, Errors } from '../../types/types';
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -36,7 +21,7 @@ export default function LoginPage() {
     const handleInput = (e: { target: { name: string; value: string } }) => {
         if (e.target.name === "email") {
             if (e.target.value.indexOf("@") === -1) {
-                setErrors((e) => ({ ...e, email: "Please enter a valid email." }));
+                toast.error("Please enter a valid email.");
             } else {
                 setErrors((e) => ({ ...e, email: null }));
             }
@@ -58,7 +43,7 @@ export default function LoginPage() {
     const loginUser = async (e: React.FormEvent) => {
         e.preventDefault();
         if (input.email === "" || input.password === "") {
-            setErrors((e) => ({ ...e, prompt: "Fill all sections" }));
+            toast.error("Fill all sections");
             return;
         } else {
             setErrors((e) => ({ ...e, prompt: "" }));
@@ -85,33 +70,37 @@ export default function LoginPage() {
                 ...e,
                 prompt: String(err),
             }));
+            toast.error("Something went worng. Try again later.");
         }
     };
 
 
     return (
-        <div id="loginPage">
-            <div className="promptContainer">
-                <div className='promptContainerImg'>
-                    <img src={loginPlane} alt="" />
-                    <h2>Welcome aboard</h2>
-                    <p>just a couple of clicks and we start our journey</p>
-                </div>
-                <div className='prompt'>
-                    <h1>Welcome</h1>
-                    <form>
-                        <input type='email'
-                            placeholder="Email"
-                            name="email"
-                            onChange={handleInput} />
-                        <input type="password"
-                            placeholder="Password"
-                            name="password"
-                            onChange={handleInput} />
-                        <input type="submit" value="Login" className='submitButton' id='loginButton' onClick={loginUser} />
-                    </form>
+        <>
+            <ToastContainer position="top-right" autoClose={6000} hideProgressBar={false} />
+            <div id="loginPage">
+                <div className="promptContainer">
+                    <div className='promptContainerImg'>
+                        <img src={loginPlane} alt="" />
+                        <h2>Welcome aboard</h2>
+                        <p>just a couple of clicks and we start our journey</p>
+                    </div>
+                    <div className='prompt'>
+                        <h1>Welcome</h1>
+                        <form>
+                            <input type='email'
+                                placeholder="Email"
+                                name="email"
+                                onChange={handleInput} />
+                            <input type="password"
+                                placeholder="Password"
+                                name="password"
+                                onChange={handleInput} />
+                            <input type="submit" value="Login" className='submitButton' id='loginButton' onClick={loginUser} />
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
