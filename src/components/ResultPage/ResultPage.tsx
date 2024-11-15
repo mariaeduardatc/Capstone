@@ -1,20 +1,25 @@
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { State } from '../../types/types';
+import { useContext, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ApiResponse, State } from '../../types/types';
 import { DragDropContext, Droppable, Draggable, DraggableLocation } from "react-beautiful-dnd";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from "lodash";
 import './ResultPage.css'
+import { AuthenticatedUserContext, LoadingContext } from '../App/App';
+import APIClient from '../../api/client';
 
 function Result() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { isAuthenticated } = useContext(AuthenticatedUserContext)
+    const { setIsLoading } = useContext(LoadingContext);
 
     const itinerary = typeof location.state.response === 'string'
         ? JSON.parse(location.state.response)
         : location.state.response
     const destinationCity = location.state && location.state.city;
+    const numberDays = location.state && location.state.days;
     const hasResponseData = itinerary && Object.keys(itinerary).length > 0;
 
     const initialState: State = hasResponseData
@@ -63,6 +68,53 @@ function Result() {
 
         navigate('/routeDirections', { state: { places: places, destinationCity: destinationCity } })
     };
+    async function postAPICall(prompt: object): Promise<ApiResponse> {
+        const apiClient = new APIClient();
+        const apiRoute = '/itinerary/saveItinerary';
+        const response = await apiClient.post(apiRoute, prompt, {});
+        return response;
+    }
+
+    const handleSaveIntinerary = async (isAuthenticated: any) => {
+        const userId = isAuthenticated.id;
+
+        // post itinerary to database
+        try {
+            const input = {
+                user_id: userId,
+                saved_itinerary: itinerary,
+                number_of_days: numberDays,
+                city_name: destinationCity,
+            }
+
+            console.log(input)
+
+            const itineraryCall = await postAPICall(input);
+
+            if (itineraryCall?.status === 200) {
+                setIsLoading(false);
+                navigate("/userpage");
+            }
+            console.log('Itinerary posted');
+        } catch {
+            console.log('Error posting itinerary');
+        }
+
+    }
+
+    const saveBody = isAuthenticated === null ? (
+        <>
+            <button>
+                <Link to='/login'>
+                    Login to save your itinerary
+                </Link>
+            </button>
+        </>
+    ) : (
+        <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
+                Save Itinerary
+        </button>
+    )
 
     return (
         <div className='resultPage'>
@@ -120,6 +172,7 @@ function Result() {
                     </DragDropContext>
                 </div>
             )}
+            {saveBody}
         </div>
     );
 }
