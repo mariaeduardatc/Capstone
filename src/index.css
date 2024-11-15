@@ -12,6 +12,11 @@
     border: none;
   }
 
+  a{
+    text-decoration: none;
+    color: inherit;
+  }
+
   input{
     cursor: pointer;
   }

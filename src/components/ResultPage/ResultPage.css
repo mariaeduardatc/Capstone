@@ -5,6 +5,14 @@
     align-items: center;
     color: black;
     flex-grow: 4;
+
+    button{
+        margin-top: 2%;
+        background-color: var(--blue-dark);
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+    }
 }
 
 .resultBlock {

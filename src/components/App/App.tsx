@@ -47,7 +47,6 @@ function App() {
               <Route path="/result" element={<Result />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              {/* <Route path="/userpage" element={<UserPage />} /> */}
               <Route path="/routeDirections" element={<Directions />} />
               {(isAuthenticated) ? <Route path="/userpage" element={<UserPage />} /> : null}
             </Routes>
