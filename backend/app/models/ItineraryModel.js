@@ -49,7 +49,7 @@ class ItineraryModel {
         );
 
         const itineraryTag = result.rows;
-        const itineraryList = itineraryTag.map(() => this._createItem(itinerary));
+        const itineraryList = itineraryTag.map((itinerary) => this._createItem(itinerary));
 
         return itineraryList;
     }
