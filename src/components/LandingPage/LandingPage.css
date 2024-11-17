@@ -1,8 +1,4 @@
-*{
-    font-weight: 500;
-}
-
-#landingPage{
+#landingPage {
     display: flex;
     flex-direction: column;
 }
@@ -50,7 +46,7 @@
     }
 }
 
-.triplePattern{
+.triplePattern {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -59,34 +55,36 @@
     gap: 1.5rem;
     background-color: var(--main-blue-ligth);
 
-    h2{
+    h2 {
         color: var(--blue-dark);
         font-size: 36px;
     }
 
-    h4{
+    h4 {
         font-size: 20px;
     }
 
-    h4, h5, p{
+    h4,
+    h5,
+    p {
         color: white;
     }
 }
 
-.cardDeck{
+.cardDeck {
     display: flex;
     justify-content: center;
     margin-bottom: 5rem;
 }
 
-.card{
+.card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: top;
 
     background-color: var(--blue-dark);
-    
+
     margin: 3rem;
     padding: 2rem;
     height: 50vh;
@@ -94,30 +92,20 @@
     border-radius: 20px;
     gap: 2rem;
 
-    h5{
+    h5 {
         font-size: 18spx;
     }
 
-    p{
-        font-weight: 300;
+    p {
         font-size: 16px;
         text-align: center;
     }
 }
 
-#settings{
-    img{
-        width: fit-content;
-    }
-}
-
-#destinations{
+#destinations {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 3.5rem;
     margin: 3rem;
-    img{
-        width: fit-content;
-    }
 }

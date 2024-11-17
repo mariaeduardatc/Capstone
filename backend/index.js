@@ -1,14 +1,10 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const passport = require('passport')
-const OpenAI = require('openai');
-const { TRIP_PROMPT } = require('./app/utils/constants');
 const UserRouter = require('./app/routers/userRouters');
 const APIRouter = require('./app/routers/APIRouters');
+const ItineraryRouter = require('./app/routers/ItineraryRouters')
 const authenticationMiddleware = require('./app/middlewares/authMiddleware')
-
-dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -22,36 +18,12 @@ app.use(cors({
 }));
 
 app.use('/user', UserRouter);
-app.use('/api/maps', APIRouter);
+app.use('/api', APIRouter);
+app.use('/itinerary', ItineraryRouter);
 
 passport.use('jwt', authenticationMiddleware.jwtStrategy);
-app.use(authenticationMiddleware.authenticateRequest);
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-app.post('/api/itinerary', async (req, res) => {
-  const { city, duration } = req.body; 
-  const tripPrompt = TRIP_PROMPT
-        .replace("{city}", city)
-        .replace("{numberDays}", duration);
-
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: tripPrompt,
-        },
-      ],
-    });
-
-    const itinerary = completion.choices[0].message.content;
-    res.json({ itinerary });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'An error occurred' });
-  }
+app.use('/userpage', authenticationMiddleware.authenticateRequest, (req, res) => {
+  res.json({ message: 'You have access to the protected route' });
 });
 
 app.listen(port, () => {

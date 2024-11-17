@@ -23,7 +23,8 @@
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.2"
+    "react-router-dom": "^6.22.2",
+    "react-toastify": "^10.0.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7",

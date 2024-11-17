@@ -1,36 +1,33 @@
-const fetch = (...args) => import('node-fetch').then(module => module.default(...args));
+const OpenAI = require('openai');
+const dotenv = require('dotenv');
+const { TRIP_PROMPT } = require('../../app/utils/constants');
 
-class MapsModel {
-    constructor() {}
+dotenv.config();
 
-    async getDirectionsFromGoogleMaps(places) {
-        if (!places || places.length < 2) {
-            throw new Error('At least two places are required to get directions.');
-        }
+class APIModel {
+    constructor() {
+        this.openAi = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    }
 
-        const origin = places[0];
-        const destination = places[places.length - 1];
-        const waypoints = places.length > 2
-            ? places.slice(1, places.length - 1).join('|')
-            : '';
-
-        const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-        const apiUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${encodeURIComponent(waypoints)}&key=${apiKey}`;
-
+    async generateChatPrompt(tripParams) {
+        const tripPrompt = TRIP_PROMPT
+            .replace("{city}", tripParams.city)
+            .replace("{numberDays}", tripParams.duration);
         try {
-            const response = await fetch(apiUrl);
-            const directionsData = await response.json();
-
-            if (!response.ok) {
-                throw new Error(directionsData.error_message || 'Failed to fetch directions from Google Maps API.');
-            }
-
-            return directionsData;
-        } catch (error) {
-            console.error('Error fetching directions from Google Maps:', error);
-            throw new Error('Failed to fetch directions');
+            const completion = await this.openAi.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "system", content: tripPrompt }],
+                max_tokens: 3000,
+                temperature: 0,
+                top_p: 1,
+            });
+            return completion;
+        } catch (err) {
+            console.error('Error fetching OpenAI prompt: ', err);
+            throw err;
         }
     }
+
 }
 
-module.exports = MapsModel;
+module.exports = APIModel;

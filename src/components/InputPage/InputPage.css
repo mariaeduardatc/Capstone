@@ -1,13 +1,13 @@
-
-#inputPage{
+#inputPage {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--main-blue-ligth);
+    color: var(--blue-dark);
     height: 90vh;
 }
 
-.promptContainer{
+.promptContainer {
     background-color: white;
     display: flex;
     height: fit-content;
@@ -16,32 +16,31 @@
     border-bottom: solid;
     border-width: 4px;
     border-radius: 32px;
-    
-    img{
+
+    img {
         border-radius: 32px 0px 0px 32px;
     }
 }
 
-.prompt{
+.prompt {
     display: flex;
     flex-direction: column;
     gap: 5vh;
     margin: 3vw;
-    
 
-    form{
+    form {
         display: flex;
         flex-direction: column;
         gap: 1vh;
 
-        input{
+        input {
             border: 0;
             background-color: rgba(167, 195, 221, 0.3);
             padding: 1vh;
             border-radius: 32px;
         }
 
-        .submitButton{
+        .submitButton {
             background-color: var(--main-blue-ligth);
         }
     }

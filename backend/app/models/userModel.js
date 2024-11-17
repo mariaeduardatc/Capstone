@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const dbClientInstance = require('../../database/db');
+const {userDbClient} = require('../../database/db');
 const { BadRequestError, UnauthorizedError, NotFoundError, UnprocessableEntityError } = require('../utils/errors');
 const CONFIG = require('../../app/config/config');
 const BCRYPT_WORK_FACTOR = CONFIG.UTILS.BCRYPT_WORK_FACTOR;
@@ -25,8 +25,8 @@ class User {
     await this.insertUserIntoDatabase({ ...creds, password: hashedPassword });
     const userObj = await this.retrieveUserObjByEmail(creds.email);
     return userObj;
-  } 
-  
+  }
+
   notEmptyCreds(creds) {
     const areEmpty = Object.values(creds).some((cred) => !cred);
     if (areEmpty) {
@@ -50,6 +50,14 @@ class User {
     const isValid = emailRegex.test(email);
     if (!isValid) {
       throw new BadRequestError('Email is not in a valid format.');
+    }
+  }
+
+  isValidPassword(password) {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{7,}$/;
+    const isValid = passwordRegex.test(password);
+    if (!isValid) {
+      throw new BadRequestError('Password must be at least 7 characters long, with one special character and one uppercase letter.');
     }
   }
 
@@ -77,25 +85,25 @@ class User {
   // --Database Queries--
   async fetchUserByEmail(email) {
     const query = 'SELECT id, email FROM users WHERE email = $1;';
-    const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+    const result = await userDbClient.query(query, [email.toLowerCase()]);
     return result.rows[0];
   }
 
   async fetchUserHashedPassword(email) {
     const query = 'SELECT password FROM users WHERE email = $1;';
-    const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+    const result = await userDbClient.query(query, [email.toLowerCase()]);
     return result.rows[0];
   }
 
   async retrieveUserObjByEmail(email) {
     const query = 'SELECT id, first_name, last_name, email FROM users WHERE email = $1;';
-    const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+    const result = await userDbClient.query(query, [email.toLowerCase()]);
     return result.rows[0];
   }
 
   async retrieveUserObjById(id) {
     const query = 'SELECT id, first_name, last_name, email FROM users WHERE id = $1;';
-    const result = await dbClientInstance.query(query, [id]);
+    const result = await userDbClient.query(query, [id]);
     return result.rows[0];
   }
 
@@ -104,7 +112,7 @@ class User {
       firstName, lastName, email, password,
     } = user;
     const query = 'INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);';
-    await dbClientInstance.query(query, [firstName, lastName, email.toLowerCase(), password]);
+    await userDbClient.query(query, [firstName, lastName, email.toLowerCase(), password]);
   }
 
   // --Data Processing--
@@ -115,4 +123,4 @@ class User {
   }
 }
 
-module.exports =  User;
+module.exports = User;

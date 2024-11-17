@@ -1,4 +1,4 @@
-#loginPage{
+#loginPage {
     display: flex;
     background-color: var(--main-blue-ligth);
     height: 90vh;
@@ -8,13 +8,13 @@
     color: var(--blue-dark);
 }
 
-.promptContainer{
+.promptContainer {
     width: 80vw;
     height: 80vh;
     border: none;
 }
 
-.promptContainerImg{
+.promptContainerImg {
     background-color: var(--blue-dark);
     color: white;
     display: flex;
@@ -23,35 +23,23 @@
     justify-content: center;
     border-radius: 32px 0px 0px 32px;
     gap: 0.5rem;
-
-    img{
-        width: fit-content;
-    }
-
-    h2{
-        font-weight: 400;
-    }
-
-    p{
-        font-weight: 300;
-    }
 }
 
-.prompt{
+.prompt {
     align-items: center;
 
-    form{
+    form {
         display: flex;
         align-items: center;
         justify-content: center;
 
-        input{
+        input {
             width: 80%;
         }
     }
 }
 
-#loginButton{
+#loginButton {
     background-color: var(--blue-dark);
     color: white;
 }
