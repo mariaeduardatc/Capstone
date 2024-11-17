@@ -68,6 +68,7 @@ function Result() {
 
         navigate('/routeDirections', { state: { places: places, destinationCity: destinationCity } })
     };
+
     async function postAPICall(prompt: object): Promise<ApiResponse> {
         const apiClient = new APIClient();
         const apiRoute = '/itinerary/saveItinerary';
@@ -87,19 +88,15 @@ function Result() {
                 city_name: destinationCity,
             }
 
-            console.log(input)
-
             const itineraryCall = await postAPICall(input);
 
             if (itineraryCall?.status === 200) {
                 setIsLoading(false);
                 navigate("/userpage");
             }
-            console.log('Itinerary posted');
         } catch {
             console.log('Error posting itinerary');
         }
-
     }
 
     const saveBody = isAuthenticated === null ? (
