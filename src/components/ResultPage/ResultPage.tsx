@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ApiResponse, State } from '../../types/types';
 import { DragDropContext, Droppable, Draggable, DraggableLocation } from "react-beautiful-dnd";
 import { ToastContainer, toast } from 'react-toastify';
+import { Trash2 } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from "lodash";
 import './ResultPage.css'
@@ -35,6 +36,15 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
+
+    const handleDelete = (dayKey: string, index: number) => {
+        setState(prev => {
+            const newState = { ...prev };
+            newState[dayKey].places.splice(index, 1);
+            return newState;
+        });
+        toast.success("Place removed from itinerary");
+    };
 
     const handleDragEnd = ({ destination, source }: { destination: any, source: DraggableLocation }) => {
         if (!destination) {
@@ -109,7 +119,7 @@ function Result() {
         </>
     ) : (
         <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
-                Save Itinerary
+            Save Itinerary
         </button>
     )
 
@@ -153,7 +163,18 @@ function Result() {
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                             >
-                                                                {el.name}
+                                                                <span className="flex justify-between items-center w-full">
+                                                                    {el.name}
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleDelete(key, index);
+                                                                        }}
+                                                                        className="ml-2 p-1 hover:text-red-600 transition-colors"
+                                                                    >
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </span>
                                                             </div>
                                                         )}
                                                     </Draggable>
