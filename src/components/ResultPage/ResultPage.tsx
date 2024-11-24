@@ -39,11 +39,11 @@ function Result() {
 
     const handleDelete = (dayKey: string, index: number) => {
         setState(prev => {
-            const newState = { ...prev };
-            newState[dayKey].places.splice(index, 1);
-            return newState;
+            const newState = { ...prev }
+            newState[dayKey].places.splice(index, 1)
+            return newState
         });
-        toast.success("Place removed from itinerary");
+        toast.success("Place removed from itinerary")
     };
 
     const handleDragEnd = ({ destination, source }: { destination: any, source: DraggableLocation }) => {
@@ -163,18 +163,16 @@ function Result() {
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                             >
-                                                                <span className="flex justify-between items-center w-full">
                                                                     {el.name}
                                                                     <button
                                                                         onClick={(e) => {
                                                                             e.stopPropagation();
                                                                             handleDelete(key, index);
                                                                         }}
-                                                                        className="ml-2 p-1 hover:text-red-600 transition-colors"
+                                                                        id='deleteIcon'
                                                                     >
                                                                         <Trash2 size={16} />
                                                                     </button>
-                                                                </span>
                                                             </div>
                                                         )}
                                                     </Draggable>

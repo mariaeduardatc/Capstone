@@ -77,6 +77,18 @@
     border-width: 1px 4px 4px 1px;
     border-radius: 10px;
     background-color: white;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    position: relative;
+    
+    #deleteIcon {
+        border: 0;
+        padding: 0;
+        background-color: transparent;
+        color: var(--main-blue-ligth);
+        margin-left: 8px;
+    }
 }
 
 .item.dragging {
