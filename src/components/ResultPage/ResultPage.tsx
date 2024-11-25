@@ -36,6 +36,8 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
+    const [addingPlace, setAddingPlace] = useState<{ [key: string]: boolean }>({})
+    const [newPlaceName, setNewPlaceName] = useState<string>("")
 
     const handleDelete = (dayKey: string, index: number) => {
         setState(prev => {
@@ -44,6 +46,28 @@ function Result() {
             return newState
         });
         toast.success("Place removed from itinerary")
+    };
+
+    const handleStartAddPlace = (dayKey: string) => {
+        setAddingPlace(prev => ({ ...prev, [dayKey]: true }))
+        setNewPlaceName("")
+    };
+
+    const handleAddPlace = (dayKey: string) => {
+        if (newPlaceName.trim()) {
+            setState(prev => {
+                const newState = { ...prev }
+                newState[dayKey].places.push({
+                    name: newPlaceName.trim(),
+                    id: Date.now()
+                    ,
+                    description: ''
+                });
+                return newState
+            });
+            setAddingPlace(prev => ({ ...prev, [dayKey]: false }))
+            toast.success("New place added to itinerary")
+        }
     };
 
     const handleDragEnd = ({ destination, source }: { destination: any, source: DraggableLocation }) => {
@@ -139,7 +163,12 @@ function Result() {
                         {_.map(state, (data, key) => (
                             <div key={key} className="column">
                                 <div className='columnHeader'>
-                                    <h3>{data.title}</h3>
+                                    <div className="header-content">
+                                        <h3>{data.title}</h3>
+                                        <button onClick={() => handleStartAddPlace(key)}>
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
                                 <Droppable droppableId={key}>
                                     {(provided) => (
@@ -163,16 +192,15 @@ function Result() {
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                             >
-                                                                    {el.name}
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            handleDelete(key, index);
-                                                                        }}
-                                                                        id='deleteIcon'
-                                                                    >
-                                                                        <Trash2 size={16} />
-                                                                    </button>
+                                                                {el.name}
+                                                                <button onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleDelete(key, index);
+                                                                }}
+                                                                    id='deleteIcon'
+                                                                >
+                                                                    <Trash2 size={16} />
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </Draggable>
@@ -182,6 +210,21 @@ function Result() {
                                         </div>
                                     )}
                                 </Droppable>
+                                {addingPlace[key] && (
+                                    <div>
+                                        <input
+                                            type="text"
+                                            value={newPlaceName}
+                                            onChange={(e) => setNewPlaceName(e.target.value)}
+                                            placeholder="Enter place name"
+                                        />
+                                        <button onClick={() => handleAddPlace(key)}>
+                                            Add
+                                        </button>
+                                        <button onClick={() => setAddingPlace(prev => ({ ...prev, [key]: false }))}>
+                                            Cancel
+                                        </button>
+                                    </div>)}
                                 <button onClick={() => handleMapsDirections(key)}>Generate directions</button>
                             </div>
                         ))}
