@@ -52,6 +52,7 @@ export default function InputPage() {
 
             if (err instanceof Error) {
                 setError({ message: err.message });
+                console.log(error)
             } else if (err.response && err.response.data) {
                 setError({
                     message: err.response.data.message || "An error occurred",
