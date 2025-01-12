@@ -1,0 +1,29 @@
+.directions-container {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+}
+
+.map {
+    height: 100%;
+    width: 100%;
+}
+
+.directions {
+    position: relative;
+    z-index: 1;
+    top: -95vh;
+    left: 75vw;
+    color: white;
+    background-color: #004169cf;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+
+    button {
+        background-color: transparent;
+        color: white;
+        text-decoration: underline;
+    }
+}
