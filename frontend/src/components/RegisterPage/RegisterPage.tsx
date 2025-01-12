@@ -69,7 +69,7 @@ export default function RegisterPage() {
       }
 
       const res = await postAPICall(responseInput);
-
+      // test
       if (res?.status === 200) {
         setIsLoading(false);
         setIsAuthenticated(res.body);
@@ -79,6 +79,7 @@ export default function RegisterPage() {
           ...e,
           prompt: res.body.error?.message,
         }));
+        console.log(error);
         setIsLoading(false);
       }
     } catch (err) {

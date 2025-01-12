@@ -47,6 +47,7 @@ export default function LoginPage() {
             return;
         } else {
             setErrors((e) => ({ ...e, prompt: "" }));
+            console.log(errors)
         }
 
         try {
