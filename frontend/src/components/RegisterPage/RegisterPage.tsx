@@ -79,6 +79,7 @@ export default function RegisterPage() {
           ...e,
           prompt: res.body.error?.message,
         }));
+        console.log(error);
         setIsLoading(false);
       }
     } catch (err) {
