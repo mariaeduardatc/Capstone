@@ -1,0 +1,53 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rubik';
+  font-weight: 500;
+  width: 100%;
+
+  button{
+    cursor: pointer;
+    width: fit-content;
+    border: none;
+  }
+
+  input{
+    cursor: pointer;
+  }
+
+  h1, h2, h3, h4, h5, h6, p{
+    width: fit-content;
+    height: fit-content;
+  }
+
+  h1{
+    font-size: 4rem;
+  }
+
+  h2{
+    font-size: 2.5rem;
+  }
+
+  p{
+    font-weight: 300;
+  }
+
+  img{
+    width: fit-content;
+  }
+}
+
+:root{
+  --main-blue-ligth: rgba(167, 195, 221, 1);
+  --blue-dark: #004169;
+  --blue-detail: #8CC1FF;
+  --text-gray: #5E6282;
+}
+
+.bordered-element {
+  border-radius: 10px;
+  border: solid black;
+  border-width: 1px 4px 4px 1px;
+}
+
