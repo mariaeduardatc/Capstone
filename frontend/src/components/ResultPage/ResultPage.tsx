@@ -15,6 +15,10 @@ function Result() {
         fetchData(state);
     }, []);
 
+    useEffect(() => {
+        fetchDataImg(state);
+    }, []);
+
     const location = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated } = useContext(AuthenticatedUserContext);
@@ -88,28 +92,25 @@ function Result() {
         }
     }
 
-    useEffect(() => {
-        fetchData(state);
-    }, []);
-
-    async function postAPICall(prompt: object, route: string = '/itinerary/saveItinerary'): Promise<ApiResponse> {
+    async function postAPICallItinerary(prompt: object, route: string = '/itinerary/saveItinerary'): Promise<ApiResponse> {
         const apiClient = new APIClient();
         const response = await apiClient.post(route, prompt, {});
         return response;
     }
 
-    async function getAPICall(city: object): Promise<ApiResponseImg> {
+
+    async function getAPICallImg(city: object): Promise<ApiResponseImg> {
         const apiClient = new APIClient();
         const apiRoute = '/api/image';
         const response = await apiClient.post(apiRoute, city, {});
         return response;
     }
 
-    async function fetchData(state: State) {
+    async function fetchDataImg(state: State) {
         try {
             const promises = _.flatMap(state, (data) => {
                 return data.places.map(async (el) => {
-                    const resImg = await getAPICall({ city: el.name });
+                    const resImg = await getAPICallImg({ city: el.name });
                     return { [el.name]: resImg?.body.results };
                 });
             });
@@ -235,8 +236,30 @@ function Result() {
 
         if (res?.body) {
             const completionResponse = (res.body as { completionResponse: string }).completionResponse;
-            setModalContent(completionResponse); // Set modal content
-            setIsModalOpen(true); // Show the modal
+            setModalContent(completionResponse);
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleSaveIntinerary = async (isAuthenticated: any) => {
+        const userId = isAuthenticated.id;
+
+        try {
+            const input = {
+                user_id: userId,
+                saved_itinerary: itinerary,
+                number_of_days: numberDays,
+                city_name: destinationCity,
+            };
+
+            const itineraryCall = await postAPICallItinerary(input);
+
+            if (itineraryCall?.status === 200) {
+                setIsLoading(false);
+                navigate("/userpage");
+            }
+        } catch {
+            console.log('Error posting itinerary');
         }
     };
 
@@ -245,6 +268,17 @@ function Result() {
         setModalContent("");
     };
 
+    const saveBody = isAuthenticated === null ? (
+        <button>
+            <Link to='/login'>
+                Login to save your itinerary
+            </Link>
+        </button>
+    ) : (
+        <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
+            Save Itinerary
+        </button>
+    );
 
     return (
         <div className='resultPage'>
@@ -338,7 +372,8 @@ function Result() {
                         ))}
                     </DragDropContext>
                 </div>
-            )
+            )}
+
             {saveBody}
 
             {/* Modal */}
