@@ -22,3 +22,24 @@ export interface Errors {
     status?: number;
     details?: object;
 }
+
+export interface ImageData {
+    id: string;
+    alt_description: string;
+    urls: {
+        raw: string;
+        full: string;
+        regular: string;
+        small: string;
+        thumb: string;
+    };
+}
+
+export interface ApiResponseImg {
+    ok: boolean;
+    status: number;
+    body: {
+        results: ImageData[];
+        
+    };
+}
