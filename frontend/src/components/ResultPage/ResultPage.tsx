@@ -15,6 +15,10 @@ function Result() {
         fetchData(state);
     }, []);
 
+    useEffect(() => {
+        fetchDataImg(state);
+    }, []);
+
     const location = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated } = useContext(AuthenticatedUserContext);
@@ -88,28 +92,24 @@ function Result() {
         }
     }
 
-    useEffect(() => {
-        fetchData(state);
-    }, []);
-
-    async function postAPICall(prompt: object, route: string = '/itinerary/saveItinerary'): Promise<ApiResponse> {
+    async function postAPICallItinerary(prompt: object, route: string = '/itinerary/saveItinerary'): Promise<ApiResponse> {
         const apiClient = new APIClient();
         const response = await apiClient.post(route, prompt, {});
         return response;
     }
 
-    async function getAPICall(city: object): Promise<ApiResponseImg> {
+    async function getAPICallImg(city: object): Promise<ApiResponseImg> {
         const apiClient = new APIClient();
         const apiRoute = '/api/image';
         const response = await apiClient.post(apiRoute, city, {});
         return response;
     }
 
-    async function fetchData(state: State) {
+    async function fetchDataImg(state: State) {
         try {
             const promises = _.flatMap(state, (data) => {
                 return data.places.map(async (el) => {
-                    const resImg = await getAPICall({ city: el.name });
+                    const resImg = await getAPICallImg({ city: el.name });
                     return { [el.name]: resImg?.body.results };
                 });
             });
@@ -181,7 +181,7 @@ function Result() {
 
     const handleExtraInfo = async (placeName: string) => {
         const req = { placeName };
-        const res = await postAPICall(req, '/api/summary');
+        const res = await postAPICall(req);
 
         if (res?.body) {
             const completionResponse = (res.body as { completionResponse: string }).completionResponse;
@@ -201,7 +201,7 @@ function Result() {
                 city_name: destinationCity,
             };
 
-            const itineraryCall = await postAPICall(input);
+            const itineraryCall = await postAPICallItinerary(input);
 
             if (itineraryCall?.status === 200) {
                 setIsLoading(false);
@@ -228,23 +228,6 @@ function Result() {
             Save Itinerary
         </button>
     );
-
-    const handleExtraInfo = async (placeName: string) => {
-        const req = { placeName };
-        const res = await postAPICall(req);
-
-        if (res?.body) {
-            const completionResponse = (res.body as { completionResponse: string }).completionResponse;
-            setModalContent(completionResponse); // Set modal content
-            setIsModalOpen(true); // Show the modal
-        }
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setModalContent("");
-    };
-
 
     return (
         <div className='resultPage'>
@@ -338,7 +321,7 @@ function Result() {
                         ))}
                     </DragDropContext>
                 </div>
-            )
+            )}
             {saveBody}
 
             {/* Modal */}
