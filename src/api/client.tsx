@@ -26,7 +26,6 @@ class APIClient {
       body: body ? JSON.stringify(body) : null,
       credentials: 'include',
     });
-    console.log(response.body);
     const data = await response.json();
     return {
       ok: response.ok,

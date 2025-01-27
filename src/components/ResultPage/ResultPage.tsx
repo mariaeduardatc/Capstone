@@ -1,20 +1,26 @@
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { State } from '../../types/types';
+import { useContext, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ApiResponse, State } from '../../types/types';
 import { DragDropContext, Droppable, Draggable, DraggableLocation } from "react-beautiful-dnd";
 import { ToastContainer, toast } from 'react-toastify';
+import { Trash2 } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from "lodash";
 import './ResultPage.css'
+import { AuthenticatedUserContext, LoadingContext } from '../App/App';
+import APIClient from '../../api/client';
 
 function Result() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { isAuthenticated } = useContext(AuthenticatedUserContext)
+    const { setIsLoading } = useContext(LoadingContext);
 
     const itinerary = typeof location.state.response === 'string'
         ? JSON.parse(location.state.response)
         : location.state.response
     const destinationCity = location.state && location.state.city;
+    const numberDays = location.state && location.state.days;
     const hasResponseData = itinerary && Object.keys(itinerary).length > 0;
 
     const initialState: State = hasResponseData
@@ -30,6 +36,39 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
+    const [addingPlace, setAddingPlace] = useState<{ [key: string]: boolean }>({})
+    const [newPlaceName, setNewPlaceName] = useState<string>("")
+
+    const handleDelete = (dayKey: string, index: number) => {
+        setState(prev => {
+            const newState = { ...prev }
+            newState[dayKey].places.splice(index, 1)
+            return newState
+        });
+        toast.success("Place removed from itinerary")
+    };
+
+    const handleStartAddPlace = (dayKey: string) => {
+        setAddingPlace(prev => ({ ...prev, [dayKey]: true }))
+        setNewPlaceName("")
+    };
+
+    const handleAddPlace = (dayKey: string) => {
+        if (newPlaceName.trim()) {
+            setState(prev => {
+                const newState = { ...prev }
+                newState[dayKey].places.push({
+                    name: newPlaceName.trim(),
+                    id: Date.now()
+                    ,
+                    description: ''
+                });
+                return newState
+            });
+            setAddingPlace(prev => ({ ...prev, [dayKey]: false }))
+            toast.success("New place added to itinerary")
+        }
+    };
 
     const handleDragEnd = ({ destination, source }: { destination: any, source: DraggableLocation }) => {
         if (!destination) {
@@ -64,6 +103,50 @@ function Result() {
         navigate('/routeDirections', { state: { places: places, destinationCity: destinationCity } })
     };
 
+    async function postAPICall(prompt: object): Promise<ApiResponse> {
+        const apiClient = new APIClient();
+        const apiRoute = '/itinerary/saveItinerary';
+        const response = await apiClient.post(apiRoute, prompt, {});
+        return response;
+    }
+
+    const handleSaveIntinerary = async (isAuthenticated: any) => {
+        const userId = isAuthenticated.id;
+
+        // post itinerary to database
+        try {
+            const input = {
+                user_id: userId,
+                saved_itinerary: itinerary,
+                number_of_days: numberDays,
+                city_name: destinationCity,
+            }
+
+            const itineraryCall = await postAPICall(input);
+
+            if (itineraryCall?.status === 200) {
+                setIsLoading(false);
+                navigate("/userpage");
+            }
+        } catch {
+            console.log('Error posting itinerary');
+        }
+    }
+
+    const saveBody = isAuthenticated === null ? (
+        <>
+            <button>
+                <Link to='/login'>
+                    Login to save your itinerary
+                </Link>
+            </button>
+        </>
+    ) : (
+        <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
+            Save Itinerary
+        </button>
+    )
+
     return (
         <div className='resultPage'>
             <header className='background'>
@@ -80,7 +163,12 @@ function Result() {
                         {_.map(state, (data, key) => (
                             <div key={key} className="column">
                                 <div className='columnHeader'>
-                                    <h3>{data.title}</h3>
+                                    <div className="header-content">
+                                        <h3>{data.title}</h3>
+                                        <button onClick={() => handleStartAddPlace(key)}>
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
                                 <Droppable droppableId={key}>
                                     {(provided) => (
@@ -105,6 +193,14 @@ function Result() {
                                                                 {...provided.dragHandleProps}
                                                             >
                                                                 {el.name}
+                                                                <button onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleDelete(key, index);
+                                                                }}
+                                                                    id='deleteIcon'
+                                                                >
+                                                                    <Trash2 size={16} />
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </Draggable>
@@ -114,12 +210,28 @@ function Result() {
                                         </div>
                                     )}
                                 </Droppable>
+                                {addingPlace[key] && (
+                                    <div>
+                                        <input
+                                            type="text"
+                                            value={newPlaceName}
+                                            onChange={(e) => setNewPlaceName(e.target.value)}
+                                            placeholder="Enter place name"
+                                        />
+                                        <button onClick={() => handleAddPlace(key)}>
+                                            Add
+                                        </button>
+                                        <button onClick={() => setAddingPlace(prev => ({ ...prev, [key]: false }))}>
+                                            Cancel
+                                        </button>
+                                    </div>)}
                                 <button onClick={() => handleMapsDirections(key)}>Generate directions</button>
                             </div>
                         ))}
                     </DragDropContext>
                 </div>
             )}
+            {saveBody}
         </div>
     );
 }

@@ -117,10 +117,10 @@ const DB_NAME = (() => {
   }
 })();
 
-const DB_URI = process.env.DATABASE_URL || "";
+const DB_URI_USER = process.env.USER_DB_URI || "";
+const DB_URI_ITINERARY = process.env.ITINERARY_DB_URI || "";
 
 // ----- API Keys/Secrets/Tokens -----
-
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 
 // JWT Secret Key
@@ -133,7 +133,6 @@ const BCRYPT_WORK_FACTOR =
   CURRENT_ENV === "DEV" || CURRENT_ENV === "TEST" ? 1 : 13;
 
 // --- Environment Variable Object Construction ---
-
 const NODE = {
   HOST: NODE_HOST,
   PORT: NODE_PORT,
@@ -144,7 +143,8 @@ const DB = {
   PASS: DB_PASS,
   HOST: DB_HOST,
   PORT: DB_PORT,
-  URI: DB_URI,
+  URI_USER: DB_URI_USER,
+  URI_ITINERARY: DB_URI_ITINERARY,
 };
 
 const API = {

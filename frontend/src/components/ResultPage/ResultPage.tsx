@@ -11,6 +11,10 @@ import { AuthenticatedUserContext, LoadingContext } from '../App/App';
 import APIClient from '../../api/client';
 
 function Result() {
+    useEffect(() => {
+        fetchData(state);
+    }, []);
+
     const location = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated } = useContext(AuthenticatedUserContext);
@@ -36,12 +40,53 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
+
     const [addingPlace, setAddingPlace] = useState<{ [key: string]: boolean }>({});
     const [newPlaceName, setNewPlaceName] = useState<string>("");
     const [images, setImages] = useState<{ [key: string]: ImageData[] }>({});
     const [imageURL, setImageURL] = useState<ImageData[]>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState("");
+
+
+    async function postAPICall(prompt: object): Promise<ApiResponse> {
+        const apiClient = new APIClient();
+        const apiRoute = '/api/summary';
+        const response = await apiClient.post(apiRoute, prompt, {});
+        return response;
+    }
+
+    async function getAPICall(city: object): Promise<ApiResponseImg> {
+        const apiClient = new APIClient();
+        const apiRoute = '/api/image';
+        const response = await apiClient.post(apiRoute, city, {});
+        return response;
+    }
+
+    async function fetchData(state: State) {
+        try {
+            const promises = _.flatMap(state, (data) => {
+                return data.places.map(async (el) => {
+                    const resImg = await getAPICall({ city: el.name });
+                    console.log("resimage", resImg?.body)
+                    return { [el.name]: resImg?.body.results }; // Creating an object with key-value pair
+                });
+            });
+
+            const results = await Promise.all(promises);
+
+
+            // Merge the results into the images dic
+            const updatedImages = results.reduce((acc, curr) => {
+                return { ...acc, ...curr };
+            }, {});
+
+            // Update the images state with the new data
+            setImages((prevImages) => ({ ...prevImages, ...updatedImages }));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
     useEffect(() => {
         fetchData(state);
@@ -184,6 +229,23 @@ function Result() {
         </button>
     );
 
+    const handleExtraInfo = async (placeName: string) => {
+        const req = { placeName };
+        const res = await postAPICall(req);
+
+        if (res?.body) {
+            const completionResponse = (res.body as { completionResponse: string }).completionResponse;
+            setModalContent(completionResponse); // Set modal content
+            setIsModalOpen(true); // Show the modal
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalContent("");
+    };
+
+
     return (
         <div className='resultPage'>
             <header className='background'>
@@ -216,6 +278,7 @@ function Result() {
                                         >
                                             {data.places.map((el, index) => {
                                                 const draggableId = el.id != null ? el.id.toString() : index.toString();
+    
                                                 return (
                                                     <Draggable
                                                         key={draggableId}
@@ -228,10 +291,12 @@ function Result() {
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
+
                                                                 onClick={() => {
                                                                     handleExtraInfo(el.name);
                                                                     setImageURL(images[el.name]);
                                                                 }}
+
                                                             >
                                                                 {el.name}
                                                                 <button
@@ -273,15 +338,15 @@ function Result() {
                         ))}
                     </DragDropContext>
                 </div>
-            )}
+            )
             {saveBody}
-            
+
             {/* Modal */}
             {isModalOpen && (
                 <div className="modalOverlay">
                     <div className="modalContent">
                         <div className='modalImg'>
-                            {imageURL && (<img src={imageURL[0]?.urls.regular} alt={modalContent} />)}
+                            {imageURL && (<img src={imageURL[0] ?.urls.regular}/>)}
                         </div>
                         <div className='modalText'>
                             <p>{modalContent}</p>

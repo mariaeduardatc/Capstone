@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const dbClientInstance = require('../../database/db');
+const {userDbClient} = require('../../database/db');
 const { BadRequestError, UnauthorizedError, NotFoundError, UnprocessableEntityError } = require('../utils/errors');
 const CONFIG = require('../../app/config/config');
 const BCRYPT_WORK_FACTOR = CONFIG.UTILS.BCRYPT_WORK_FACTOR;
@@ -85,25 +85,25 @@ class User {
   // --Database Queries--
   async fetchUserByEmail(email) {
     const query = 'SELECT id, email FROM users WHERE email = $1;';
-    const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+    const result = await userDbClient.query(query, [email.toLowerCase()]);
     return result.rows[0];
   }
 
   async fetchUserHashedPassword(email) {
     const query = 'SELECT password FROM users WHERE email = $1;';
-    const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+    const result = await userDbClient.query(query, [email.toLowerCase()]);
     return result.rows[0];
   }
 
   async retrieveUserObjByEmail(email) {
     const query = 'SELECT id, first_name, last_name, email FROM users WHERE email = $1;';
-    const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+    const result = await userDbClient.query(query, [email.toLowerCase()]);
     return result.rows[0];
   }
 
   async retrieveUserObjById(id) {
     const query = 'SELECT id, first_name, last_name, email FROM users WHERE id = $1;';
-    const result = await dbClientInstance.query(query, [id]);
+    const result = await userDbClient.query(query, [id]);
     return result.rows[0];
   }
 
@@ -112,7 +112,7 @@ class User {
       firstName, lastName, email, password,
     } = user;
     const query = 'INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);';
-    await dbClientInstance.query(query, [firstName, lastName, email.toLowerCase(), password]);
+    await userDbClient.query(query, [firstName, lastName, email.toLowerCase(), password]);
   }
 
   // --Data Processing--
