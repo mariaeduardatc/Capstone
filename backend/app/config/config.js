@@ -126,6 +126,8 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 // JWT Secret Key
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "";
 
+const UNSPLASH = process.env.UNSPLASH_SECRET_KEY || "";
+
 // ------ Utils Environment Variables ------
 const BCRYPT_WORK_FACTOR =
   CURRENT_ENV === "DEV" || CURRENT_ENV === "TEST" ? 1 : 13;
@@ -148,6 +150,7 @@ const DB = {
 const API = {
   OPENAI: OPENAI_API_KEY,
   JWT_SECRET: JWT_SECRET_KEY,
+  UNSPLASH: UNSPLASH,
 };
 
 const UTILS = {

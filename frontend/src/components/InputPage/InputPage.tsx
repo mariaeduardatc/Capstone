@@ -41,6 +41,7 @@ export default function InputPage() {
                 duration: tripDetails.duration
             };
             const res = await postAPICall(prompt);
+            console.log(res)
 
             if (res?.body) {
                 setIsLoading(false);
