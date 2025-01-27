@@ -1,25 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ApiResponse, State, ImageData, ApiResponseImg } from '../../types/types';
 import { DragDropContext, Droppable, Draggable, DraggableLocation } from "react-beautiful-dnd";
 import { ToastContainer, toast } from 'react-toastify';
+import { Trash2 } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from "lodash";
 import './ResultPage.css'
+import { AuthenticatedUserContext, LoadingContext } from '../App/App';
 import APIClient from '../../api/client';
 
 function Result() {
-    useEffect(() => {
-        fetchData(state);
-    }, []);
-
     const location = useLocation();
     const navigate = useNavigate();
+    const { isAuthenticated } = useContext(AuthenticatedUserContext);
+    const { setIsLoading } = useContext(LoadingContext);
 
     const itinerary = typeof location.state.response === 'string'
         ? JSON.parse(location.state.response)
-        : location.state.response
+        : location.state.response;
     const destinationCity = location.state && location.state.city;
+    const numberDays = location.state && location.state.days;
     const hasResponseData = itinerary && Object.keys(itinerary).length > 0;
 
     const initialState: State = hasResponseData
@@ -35,15 +36,20 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
+    const [addingPlace, setAddingPlace] = useState<{ [key: string]: boolean }>({});
+    const [newPlaceName, setNewPlaceName] = useState<string>("");
     const [images, setImages] = useState<{ [key: string]: ImageData[] }>({});
     const [imageURL, setImageURL] = useState<ImageData[]>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState("");
 
-    async function postAPICall(prompt: object): Promise<ApiResponse> {
+    useEffect(() => {
+        fetchData(state);
+    }, []);
+
+    async function postAPICall(prompt: object, route: string = '/itinerary/saveItinerary'): Promise<ApiResponse> {
         const apiClient = new APIClient();
-        const apiRoute = '/api/summary';
-        const response = await apiClient.post(apiRoute, prompt, {});
+        const response = await apiClient.post(route, prompt, {});
         return response;
     }
 
@@ -59,48 +65,63 @@ function Result() {
             const promises = _.flatMap(state, (data) => {
                 return data.places.map(async (el) => {
                     const resImg = await getAPICall({ city: el.name });
-                    console.log("resimage", resImg?.body)
-                    return { [el.name]: resImg?.body.results }; // Creating an object with key-value pair
+                    return { [el.name]: resImg?.body.results };
                 });
             });
 
             const results = await Promise.all(promises);
-
-
-            // Merge the results into the images dic
             const updatedImages = results.reduce((acc, curr) => {
                 return { ...acc, ...curr };
             }, {});
 
-            // Update the images state with the new data
             setImages((prevImages) => ({ ...prevImages, ...updatedImages }));
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
 
+    const handleDelete = (dayKey: string, index: number) => {
+        setState(prev => {
+            const newState = { ...prev };
+            newState[dayKey].places.splice(index, 1);
+            return newState;
+        });
+        toast.success("Place removed from itinerary");
+    };
+
+    const handleStartAddPlace = (dayKey: string) => {
+        setAddingPlace(prev => ({ ...prev, [dayKey]: true }));
+        setNewPlaceName("");
+    };
+
+    const handleAddPlace = (dayKey: string) => {
+        if (newPlaceName.trim()) {
+            setState(prev => {
+                const newState = { ...prev };
+                newState[dayKey].places.push({
+                    name: newPlaceName.trim(),
+                    id: Date.now(),
+                    description: ''
+                });
+                return newState;
+            });
+            setAddingPlace(prev => ({ ...prev, [dayKey]: false }));
+            toast.success("New place added to itinerary");
+        }
+    };
 
     const handleDragEnd = ({ destination, source }: { destination: any, source: DraggableLocation }) => {
-        if (!destination) {
-            return
-        }
+        if (!destination) return;
+        if (destination.index === source.index && destination.droppableId === source.droppableId) return;
 
-        if (destination.index === source.index && destination.droppableId === source.droppableId) {
-            return
-        }
-        // Creating a copy of item before removing it from state
-        const itemCopy = { ...state[source.droppableId].places[source.index] }
-
+        const itemCopy = { ...state[source.droppableId].places[source.index] };
         setState(prev => {
-            prev = { ...prev }
-            // Remove from previous places array
-            prev[source.droppableId].places.splice(source.index, 1)
-            // Adding to new places array location
-            prev[destination.droppableId].places.splice(destination.index, 0, itemCopy)
-
-            return prev
-        })
-    }
+            prev = { ...prev };
+            prev[source.droppableId].places.splice(source.index, 1);
+            prev[destination.droppableId].places.splice(destination.index, 0, itemCopy);
+            return prev;
+        });
+    };
 
     const handleMapsDirections = async (dayKey: string) => {
         const places = state[dayKey].places.map((place) => place.name);
@@ -110,17 +131,39 @@ function Result() {
             return;
         }
 
-        navigate('/routeDirections', { state: { places: places, destinationCity: destinationCity } })
+        navigate('/routeDirections', { state: { places: places, destinationCity: destinationCity } });
     };
 
     const handleExtraInfo = async (placeName: string) => {
         const req = { placeName };
-        const res = await postAPICall(req);
+        const res = await postAPICall(req, '/api/summary');
 
         if (res?.body) {
             const completionResponse = (res.body as { completionResponse: string }).completionResponse;
-            setModalContent(completionResponse); // Set modal content
-            setIsModalOpen(true); // Show the modal
+            setModalContent(completionResponse);
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleSaveIntinerary = async (isAuthenticated: any) => {
+        const userId = isAuthenticated.id;
+
+        try {
+            const input = {
+                user_id: userId,
+                saved_itinerary: itinerary,
+                number_of_days: numberDays,
+                city_name: destinationCity,
+            };
+
+            const itineraryCall = await postAPICall(input);
+
+            if (itineraryCall?.status === 200) {
+                setIsLoading(false);
+                navigate("/userpage");
+            }
+        } catch {
+            console.log('Error posting itinerary');
         }
     };
 
@@ -128,6 +171,18 @@ function Result() {
         setIsModalOpen(false);
         setModalContent("");
     };
+
+    const saveBody = isAuthenticated === null ? (
+        <button>
+            <Link to='/login'>
+                Login to save your itinerary
+            </Link>
+        </button>
+    ) : (
+        <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
+            Save Itinerary
+        </button>
+    );
 
     return (
         <div className='resultPage'>
@@ -145,7 +200,12 @@ function Result() {
                         {_.map(state, (data, key) => (
                             <div key={key} className="column">
                                 <div className='columnHeader'>
-                                    <h3>{data.title}</h3>
+                                    <div className="header-content">
+                                        <h3>{data.title}</h3>
+                                        <button onClick={() => handleStartAddPlace(key)}>
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
                                 <Droppable droppableId={key}>
                                     {(provided) => (
@@ -156,7 +216,6 @@ function Result() {
                                         >
                                             {data.places.map((el, index) => {
                                                 const draggableId = el.id != null ? el.id.toString() : index.toString();
-    
                                                 return (
                                                     <Draggable
                                                         key={draggableId}
@@ -169,9 +228,21 @@ function Result() {
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
-                                                                onClick={() => {handleExtraInfo(el.name), setImageURL(images[el.name])}}
+                                                                onClick={() => {
+                                                                    handleExtraInfo(el.name);
+                                                                    setImageURL(images[el.name]);
+                                                                }}
                                                             >
                                                                 {el.name}
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleDelete(key, index);
+                                                                    }}
+                                                                    id='deleteIcon'
+                                                                >
+                                                                    <Trash2 size={16} />
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </Draggable>
@@ -181,18 +252,36 @@ function Result() {
                                         </div>
                                     )}
                                 </Droppable>
-                                <button onClick={() => handleMapsDirections(key)}>Generate directions</button>
+                                {addingPlace[key] && (
+                                    <div>
+                                        <input
+                                            type="text"
+                                            value={newPlaceName}
+                                            onChange={(e) => setNewPlaceName(e.target.value)}
+                                            placeholder="Enter place name"
+                                        />
+                                        <button onClick={() => handleAddPlace(key)}>
+                                            Add
+                                        </button>
+                                        <button onClick={() => setAddingPlace(prev => ({ ...prev, [key]: false }))}>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                )}
+                                <button onClick={() => handleMapsDirections(key)} id='dirButton'>Generate directions</button>
                             </div>
                         ))}
                     </DragDropContext>
                 </div>
             )}
+            {saveBody}
+            
             {/* Modal */}
             {isModalOpen && (
                 <div className="modalOverlay">
                     <div className="modalContent">
                         <div className='modalImg'>
-                            {imageURL && (<img src={imageURL[0] ?.urls.regular}/>)}
+                            {imageURL && (<img src={imageURL[0]?.urls.regular} alt={modalContent} />)}
                         </div>
                         <div className='modalText'>
                             <p>{modalContent}</p>
