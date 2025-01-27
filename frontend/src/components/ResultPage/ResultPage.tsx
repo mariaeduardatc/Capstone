@@ -182,56 +182,6 @@ function Result() {
 
     const handleExtraInfo = async (placeName: string) => {
         const req = { placeName };
-        const res = await postAPICall(req, '/api/summary');
-
-        if (res?.body) {
-            const completionResponse = (res.body as { completionResponse: string }).completionResponse;
-            setModalContent(completionResponse);
-            setIsModalOpen(true);
-        }
-    };
-
-    const handleSaveIntinerary = async (isAuthenticated: any) => {
-        const userId = isAuthenticated.id;
-
-        try {
-            const input = {
-                user_id: userId,
-                saved_itinerary: itinerary,
-                number_of_days: numberDays,
-                city_name: destinationCity,
-            };
-
-            const itineraryCall = await postAPICall(input);
-
-            if (itineraryCall?.status === 200) {
-                setIsLoading(false);
-                navigate("/userpage");
-            }
-        } catch {
-            console.log('Error posting itinerary');
-        }
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setModalContent("");
-    };
-
-    const saveBody = isAuthenticated === null ? (
-        <button>
-            <Link to='/login'>
-                Login to save your itinerary
-            </Link>
-        </button>
-    ) : (
-        <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
-            Save Itinerary
-        </button>
-    );
-
-    const handleExtraInfo = async (placeName: string) => {
-        const req = { placeName };
         const res = await postAPICall(req);
 
         if (res?.body) {
