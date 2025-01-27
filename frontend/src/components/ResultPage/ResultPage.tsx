@@ -44,7 +44,6 @@ function Result() {
         : {};
 
     const [state, setState] = useState<State>(initialState);
-
     const [addingPlace, setAddingPlace] = useState<{ [key: string]: boolean }>({});
     const [newPlaceName, setNewPlaceName] = useState<string>("");
     const [images, setImages] = useState<{ [key: string]: ImageData[] }>({});
