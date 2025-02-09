@@ -6,6 +6,12 @@
   font-weight: 500;
   width: 100%;
 
+  a{
+    text-decoration: none;
+    background-color: transparent;
+    color: white;
+  }
+
   button{
     cursor: pointer;
     width: fit-content;
