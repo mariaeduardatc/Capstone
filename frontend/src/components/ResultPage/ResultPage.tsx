@@ -219,7 +219,7 @@ function Result() {
     };
 
     const saveBody = isAuthenticated === null ? (
-        <button>
+        <button className='dirButton' id='loginButton'>
             <Link to='/login'>
                 Login to save your itinerary
             </Link>
@@ -248,7 +248,7 @@ function Result() {
                                 <div className='columnHeader'>
                                     <div className="header-content">
                                         <h3>{data.title}</h3>
-                                        <button onClick={() => handleStartAddPlace(key)}>
+                                        <button onClick={() => handleStartAddPlace(key)} className='smallButton'>
                                             +
                                         </button>
                                     </div>
@@ -282,13 +282,14 @@ function Result() {
                                                                 }}
 
                                                             >
-                                                                {el.name}
+                                                               <h4>{el.name}</h4> 
                                                                 <button
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         handleDelete(key, index);
                                                                     }}
                                                                     id='deleteIcon'
+                                                                    className='smallButton'
                                                                 >
                                                                     <Trash2 size={16} />
                                                                 </button>
@@ -317,7 +318,7 @@ function Result() {
                                         </button>
                                     </div>
                                 )}
-                                <button onClick={() => handleMapsDirections(key)} id='dirButton'>Generate directions</button>
+                                <button onClick={() => handleMapsDirections(key)} className='dirButton'>Generate directions</button>
                             </div>
                         ))}
                     </DragDropContext>
