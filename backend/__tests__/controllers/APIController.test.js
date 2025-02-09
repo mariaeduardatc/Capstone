@@ -1,6 +1,7 @@
 const APIController = require('../../app/controllers/APIController');
 const APIModel = require('../../app/models/APIModel');
 
+
 // Mock the dependencies
 jest.mock('../../app/models/APIModel');
 jest.mock('express-async-handler', () => (handler) => handler);
@@ -12,6 +13,7 @@ describe('APIController', () => {
     let mockNext;
 
     beforeEach(() => {
+
         // Create a new instance of APIController before each test
         apiController = new APIController();
 
@@ -19,6 +21,7 @@ describe('APIController', () => {
         APIModel.mockClear();
 
         // Setup mock request, response, and next function
+
         mockReq = {
             body: {}
         };
@@ -33,13 +36,14 @@ describe('APIController', () => {
 
     describe('processPromptCompletion', () => {
         it('should generate a chat prompt and send response with 200 status', async () => {
+
             // Prepare mock trip parameters
             const mockTripParams = { 
                 destination: 'Paris', 
                 duration: 5 
             };
             mockReq.body = mockTripParams;
-
+          
             // Mock the generateChatPrompt method
             const mockCompletionResponse = {
                 choices: [{
@@ -63,6 +67,7 @@ describe('APIController', () => {
         });
 
         it('should handle scenarios with empty or undefined response', async () => {
+
             // Prepare mock trip parameters
             const mockTripParams = { 
                 destination: 'Tokyo', 
@@ -86,6 +91,7 @@ describe('APIController', () => {
         });
 
         it('should handle errors when generating chat prompt', async () => {
+
             // Simulate an error scenario
             const mockError = new Error('API generation failed');
             apiController.apiModel.generateChatPrompt = jest.fn()
