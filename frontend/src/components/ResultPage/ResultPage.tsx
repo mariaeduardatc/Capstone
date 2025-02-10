@@ -60,7 +60,7 @@ function Result() {
         return response;
     }
 
-    async function getAPICall(city: object): Promise<ApiResponseImg> {
+    async function getAPICallImg(city: object): Promise<ApiResponseImg> {
         const apiClient = new APIClient();
         const apiRoute = '/api/image';
         const response = await apiClient.post(apiRoute, city, {});
@@ -71,7 +71,7 @@ function Result() {
         try {
             const promises = _.flatMap(state, (data) => {
                 return data.places.map(async (el) => {
-                    const resImg = await getAPICall({ city: el.name });
+                    const resImg = await getAPICallImg({ city: el.name });
                     console.log("resimage", resImg?.body)
                     return { [el.name]: resImg?.body.results }; // Creating an object with key-value pair
                 });
@@ -95,14 +95,6 @@ function Result() {
     async function postAPICallItinerary(prompt: object, route: string = '/itinerary/saveItinerary'): Promise<ApiResponse> {
         const apiClient = new APIClient();
         const response = await apiClient.post(route, prompt, {});
-        return response;
-    }
-
-
-    async function getAPICallImg(city: object): Promise<ApiResponseImg> {
-        const apiClient = new APIClient();
-        const apiRoute = '/api/image';
-        const response = await apiClient.post(apiRoute, city, {});
         return response;
     }
 
@@ -193,6 +185,14 @@ function Result() {
 
     const handleSaveIntinerary = async (isAuthenticated: any) => {
         const userId = isAuthenticated.id;
+        let cityImageUrl = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg ";
+
+        try {
+            const img = await getAPICallImg({ city: destinationCity });
+            cityImageUrl = img.body.results[0].urls.regular;
+        } catch {
+            console.log('Error getting city image');
+        }
 
         try {
             const input = {
@@ -200,9 +200,11 @@ function Result() {
                 saved_itinerary: itinerary,
                 number_of_days: numberDays,
                 city_name: destinationCity,
+                image_url: cityImageUrl,
             };
 
             const itineraryCall = await postAPICallItinerary(input);
+            console.log('input',input)
 
             if (itineraryCall?.status === 200) {
                 setIsLoading(false);
@@ -225,7 +227,7 @@ function Result() {
             </Link>
         </button>
     ) : (
-        <button onClick={() => handleSaveIntinerary(isAuthenticated)}>
+        <button onClick={() => handleSaveIntinerary(isAuthenticated)} className='dirButton'>
             Save Itinerary
         </button>
     );

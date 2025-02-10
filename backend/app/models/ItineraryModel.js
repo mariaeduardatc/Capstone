@@ -3,21 +3,22 @@ const {itineraryDbClient} = require('../../database/db')
 class ItineraryModel {
     async saveItinerary(creds) {
 
-        const { user_id, saved_itinerary, number_of_days, city_name } = creds;
+        const { user_id, saved_itinerary, number_of_days, city_name, image_url } = creds;
 
         const result = await itineraryDbClient.query(
             `INSERT INTO itinerary (
             user_id,
             saved_itinerary,
             number_of_days,
-            city_name
+            city_name,
+            image_url
           )
-          VALUES ($1, $2, $3, $4)
+          VALUES ($1, $2, $3, $4, $5)
           RETURNING id,
                     user_id,
                     itinerary
                     `,
-            [user_id, saved_itinerary, number_of_days, city_name]
+            [user_id, saved_itinerary, number_of_days, city_name, image_url]
         );
 
         const itineary = result.rows[0];
@@ -31,7 +32,8 @@ class ItineraryModel {
             user_id: item.user_id,
             saved_itinerary: item.saved_itinerary,
             number_of_days: item.number_of_days,
-            city_name: item.city_name
+            city_name: item.city_name,
+            image_url: item?.image_url
         }
     }
 
@@ -41,7 +43,8 @@ class ItineraryModel {
             user_id,
             saved_itinerary,
             number_of_days,
-            city_name
+            city_name,
+            image_url
 
            FROM itinerary
            WHERE user_id = $1`,

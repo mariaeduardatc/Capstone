@@ -43,3 +43,18 @@ export interface ApiResponseImg {
         
     };
 }
+
+export interface APIResponseDB {
+    ok: boolean;
+    status: number;
+    body: SavedItineraries[];
+}
+
+export interface SavedItineraries{
+    id: string;
+    user_id: string;
+    saved_itinerary: object;
+    number_of_days: string;
+    image_url: string;
+    city_name: string;
+}
