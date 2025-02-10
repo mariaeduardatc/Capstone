@@ -4,5 +4,6 @@ CREATE TABLE itinerary
     user_id INTEGER NOT NULL,
     saved_itinerary JSON NOT NULL,
     number_of_days INTEGER,
-    city_name VARCHAR(255)
+    city_name VARCHAR(255),
+    image_url TEXT
 );

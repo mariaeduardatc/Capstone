@@ -1,5 +1,7 @@
 #userpage {
-    height: 80vh;
+    h2 {
+        color: var(--blue-dark);
+    }
 }
 
 #userpage header {
@@ -7,36 +9,72 @@
     color: white;
     display: flex;
     flex-direction: column;
+    gap: 2vh;
     align-items: baseline;
+    justify-content: center;
+
     z-index: 1;
     height: 35vh;
 
+    h1,
     h2 {
-        color: var(--blue-dark);
+        margin-left: 2vw;
     }
+
 }
 
 #userpage .tripPattern {
     background-color: transparent;
     position: absolute;
-    top: 35vh;
+    padding: 4vh;
+    height: -webkit-fill-available;
+    
+    #noSaveMessage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2vh;
+
+        button {
+            background-color: var(--blue-sharp);
+            color: white;
+            padding: 0.5rem 4rem;
+            border: solid black;
+            border-width: 1px 4px 4px 1px;
+            border-radius: 10px;
+        }
+    }
 }
 
 #userpage .cardDeck {
-    justify-content: left;
     margin-bottom: 0;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto;
+    align-content: center;
+    justify-content: center;
+    grid-gap: 4vw 6vw;
 }
 
 #userpageDeck .card {
     background-color: white;
-    width: 30%;
+    width: 100%;
     border: solid var(--blue-dark);
     border-width: 0px 4px 4px 0px;
     display: flex;
     flex-direction: column;
     align-items: baseline;
+    margin: auto;
 
     h5 {
         color: rgba(0, 0, 0, 0.52);
+    }
+
+    img{
+        width: -webkit-fill-available;
+        border-radius: 10px;
+        height: 50%;
+        object-fit: cover;
     }
 }
