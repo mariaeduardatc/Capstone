@@ -1,6 +1,6 @@
-const TRIP_PROMPT = `Give me a list of places to visit in {city}, for a trip of {numberDays} days. Please divide the places per day, and return me a string that follows 
+const TRIP_PROMPT = `Give me a list of places to visit in {city}, for a {tripParams} of {numberDays} days. Please divide the places per day, and return me a string that follows 
   the structure I provided below. Provide me strictly between 3-4 activities per day, no less. Group the activities based on their walking distance (put the closest on the same day). 
-  If you don't know places of a city to visit, you can return me less days or less activities. Don't create places. Example format for a case with 2 days(if there are more than 2 days 
+  If you don't know places of a city to visit, you can return me less days or less activities. Don't create places. Take into account if it is a solo, family or friends trip. Example format for a case with 2 days(if there are more than 2 days 
   just add it with the same format and if it's 1 day show only one day). Return a valid json with the format below (I used San Francisco as an example): 
   
   {

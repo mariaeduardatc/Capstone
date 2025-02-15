@@ -12,7 +12,8 @@ export default function InputPage() {
     const { setIsLoading } = useContext(LoadingContext);
     const [tripDetails, setTripDetails] = useState({
         city: '',
-        duration: ''
+        duration: '',
+        typeTrip: ''
     });
     const [error, setError] = useState<Errors>();
 
@@ -38,10 +39,10 @@ export default function InputPage() {
             setIsLoading(true);
             const prompt = {
                 city: tripDetails.city,
-                duration: tripDetails.duration
+                duration: tripDetails.duration,
+                typeTrip: tripDetails.typeTrip
             };
             const res = await postAPICall(prompt);
-            console.log(res)
 
             if (res?.body) {
                 setIsLoading(false);
@@ -75,7 +76,7 @@ export default function InputPage() {
                     <img src={promptImage} alt="" />
                     <div className='prompt'>
                         <h1>Where are you going?</h1>
-                        <form>
+                        <form onSubmit={getItinerary} >
                             <input type="text"
                                 placeholder="type the city name"
                                 name="city"
@@ -89,7 +90,20 @@ export default function InputPage() {
                                 step="1"
                                 value={tripDetails.duration}
                                 onChange={handleTripDetails} />
-                            <input type="submit" value="Submit" onClick={(e) => getItinerary(e)} className='submitButton' />
+                            <select
+                                value={tripDetails.typeTrip}
+                                onChange={handleTripDetails}
+                                name="typeTrip"  
+                                required 
+                            >
+                                <option value="" disabled>
+                                    What kind of trip are you looking for?
+                                </option>
+                                <option value="Family trip">Family trip</option>
+                                <option value="Solo trip">Solo trip</option>
+                                <option value="Friends trip">Friends trip</option>
+                            </select>
+                            <input type="submit" value="Submit" className='submitButton' />
                         </form>
                     </div>
                 </div>

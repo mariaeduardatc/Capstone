@@ -21,7 +21,6 @@ class APIController {
     });
 
     processUnsplashImage = asyncHandler(async (req, res, _next) => {
-        console.log('inside controller', req.body.city)
         const imgReq = req.body.city;
         const query = new URLSearchParams(imgReq);
         const data = await this.apiModel.generateUnsplashImage(query);

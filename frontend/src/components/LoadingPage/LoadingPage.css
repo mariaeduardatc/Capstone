@@ -9,5 +9,6 @@
 
     img {
         width: 30vw;
+        animation-iteration-count: infinite;
     }
 }

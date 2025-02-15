@@ -33,11 +33,17 @@
         flex-direction: column;
         gap: 1vh;
 
-        input {
+        input,
+        select {
             border: 0;
             background-color: rgba(167, 195, 221, 0.3);
             padding: 1vh;
             border-radius: 32px;
+        }
+
+        select {
+            -webkit-appearance: menulist-button;
+            color: gray;
         }
 
         .submitButton {
