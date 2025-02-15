@@ -11,7 +11,8 @@ class APIModel {
     async generateChatPrompt(tripParams) {
         const tripPrompt = TRIP_PROMPT
             .replace("{city}", tripParams.city)
-            .replace("{numberDays}", tripParams.duration);
+            .replace("{numberDays}", tripParams.duration)
+            .replace("{typeTrip}", tripParams.typeTrip);
         try {
             const completion = await this.openAi.chat.completions.create({
                 model: "gpt-3.5-turbo",
@@ -43,7 +44,6 @@ class APIModel {
     }
 
     async generateUnsplashImage(query){
-        console.log('inside model')
         const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${config.API.UNSPLASH}`;
         try {
             const response = await fetch(url);
