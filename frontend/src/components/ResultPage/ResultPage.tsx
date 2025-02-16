@@ -7,7 +7,7 @@ import { Trash2 } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from "lodash";
 import './ResultPage.css'
-import { AuthenticatedUserContext, LoadingContext } from '../App/App';
+import { AuthenticatedUserContext } from '../App/App';
 import APIClient from '../../api/client';
 
 function Result() {
@@ -22,7 +22,8 @@ function Result() {
     const location = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated } = useContext(AuthenticatedUserContext);
-    const { setIsLoading } = useContext(LoadingContext);
+    // const { setIsLoading } = useContext(LoadingContext);
+    const [isLoading, setIsLoading] = useState(false);
 
     const itinerary = typeof location.state.response === 'string'
         ? JSON.parse(location.state.response)
@@ -50,8 +51,11 @@ function Result() {
     const [images, setImages] = useState<{ [key: string]: ImageData[] }>({});
     const [imageURL, setImageURL] = useState<ImageData[]>();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState("");
-
+    const [modalContent, setModalContent] = useState({
+        summary: '',
+        bestTime: '',
+        visitDuration: ''
+    });
 
     async function postAPICall(prompt: object): Promise<ApiResponse> {
         const apiClient = new APIClient();
@@ -72,7 +76,6 @@ function Result() {
             const promises = _.flatMap(state, (data) => {
                 return data.places.map(async (el) => {
                     const resImg = await getAPICallImg({ city: el.name });
-                    console.log("resimage", resImg?.body)
                     return { [el.name]: resImg?.body.results }; // Creating an object with key-value pair
                 });
             });
@@ -173,15 +176,32 @@ function Result() {
     };
 
     const handleExtraInfo = async (placeName: string) => {
-        const req = { placeName };
-        const res = await postAPICall(req);
+        setIsModalOpen(true);  // Open the modal first
+        setIsLoading(true);    // Show loading spinner
+        try {
+            const req = { placeName };
+            const res = await postAPICall(req);
 
-        if (res?.body) {
-            const completionResponse = (res.body as { completionResponse: string }).completionResponse;
-            setModalContent(completionResponse);
-            setIsModalOpen(true);
+            if (res?.body) {
+                const { summary, visitDurationOutput, bestTimeOutput } = res.body as {
+                    summary: string;
+                    visitDurationOutput: string;
+                    bestTimeOutput: string;
+                };
+
+                setModalContent({
+                    summary: summary,
+                    bestTime: bestTimeOutput,
+                    visitDuration: visitDurationOutput
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching extra info:', error);
+        } finally {
+            setIsLoading(false);  // Hide spinner and show content
         }
     };
+
 
     const handleSaveIntinerary = async (isAuthenticated: any) => {
         const userId = isAuthenticated.id;
@@ -204,10 +224,8 @@ function Result() {
             };
 
             const itineraryCall = await postAPICallItinerary(input);
-            console.log('input',input)
 
             if (itineraryCall?.status === 200) {
-                setIsLoading(false);
                 navigate("/userpage");
             }
         } catch {
@@ -217,7 +235,7 @@ function Result() {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setModalContent("");
+        // setModalContent({});
     };
 
     const saveBody = isAuthenticated === null ? (
@@ -264,7 +282,7 @@ function Result() {
                                         >
                                             {data.places.map((el, index) => {
                                                 const draggableId = el.id != null ? el.id.toString() : index.toString();
-    
+
                                                 return (
                                                     <Draggable
                                                         key={draggableId}
@@ -284,7 +302,7 @@ function Result() {
                                                                 }}
 
                                                             >
-                                                               <h4>{el.name}</h4> 
+                                                                <h4>{el.name}</h4>
                                                                 <button
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
@@ -305,19 +323,21 @@ function Result() {
                                     )}
                                 </Droppable>
                                 {addingPlace[key] && (
-                                    <div>
+                                    <div id='addPlace'>
                                         <input
                                             type="text"
                                             value={newPlaceName}
                                             onChange={(e) => setNewPlaceName(e.target.value)}
                                             placeholder="Enter place name"
                                         />
-                                        <button onClick={() => handleAddPlace(key)}>
-                                            Add
-                                        </button>
-                                        <button onClick={() => setAddingPlace(prev => ({ ...prev, [key]: false }))}>
-                                            Cancel
-                                        </button>
+                                        <div id='buttons'>
+                                            <button onClick={() => handleAddPlace(key)}>
+                                                Add
+                                            </button>
+                                            <button onClick={() => setAddingPlace(prev => ({ ...prev, [key]: false }))}>
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                                 <button onClick={() => handleMapsDirections(key)} className='dirButton'>Generate directions</button>
@@ -333,16 +353,28 @@ function Result() {
             {isModalOpen && (
                 <div className="modalOverlay">
                     <div className="modalContent">
-                        <div className='modalImg'>
-                            {imageURL && (<img src={imageURL[0] ?.urls.regular}/>)}
-                        </div>
-                        <div className='modalText'>
-                            <p>{modalContent}</p>
-                            <button onClick={closeModal}>Close</button>
-                        </div>
+                        {isLoading ? (
+                            <div className="loadingSpinner">
+                                <div className="spinner"></div>
+                                <p>Loading information...</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className='modalImg'>
+                                    {imageURL && (<img src={imageURL[0]?.urls.regular} />)}
+                                </div>
+                                <div className='modalText'>
+                                    <p>{modalContent.summary}</p> <br/>
+                                    <p><b>What is the best time to visit?</b> {modalContent.bestTime}</p> <br/>
+                                    <p><b>How long should you spend here?</b> {modalContent.visitDuration}</p>
+                                    <button onClick={closeModal}>Close</button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             )}
+
         </div>
     );
 }
