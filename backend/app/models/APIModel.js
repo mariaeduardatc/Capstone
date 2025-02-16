@@ -1,11 +1,11 @@
 const OpenAI = require('openai');
 const config = require('../config/config')
-const { TRIP_PROMPT } = require('../../app/utils/constants');
+const { TRIP_PROMPT, VISIT_DUR_PROMPT, VISIT_BEST_TIME_PROMPT } = require('../../app/utils/constants');
 
 
 class APIModel {
     constructor() {
-        this.openAi = new OpenAI({ apiKey: config.API.OPENAI});
+        this.openAi = new OpenAI({ apiKey: config.API.OPENAI });
     }
 
     async generateChatPrompt(tripParams) {
@@ -43,7 +43,47 @@ class APIModel {
         }
     }
 
-    async generateUnsplashImage(query){
+    async getVisitDurationInfo(params) {
+        const prompt = VISIT_DUR_PROMPT
+            .replace("{placeName}", params.placeName)
+            .replace("{cityName}", params.cityName)
+
+        try {
+            const completion = await this.openAi.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "system", content: prompt }],
+                max_tokens: 3000,
+                temperature: 0,
+                top_p: 1,
+            });
+            return completion;
+        } catch (err) {
+            console.error('Error fetching OpenAI prompt: ', err);
+            throw err;
+        }
+    }
+
+    async getBestTimeInfo(params) {
+        const prompt = VISIT_BEST_TIME_PROMPT
+            .replace("{placeName}", params.placeName)
+            .replace("{cityName}", params.cityName)
+
+        try {
+            const completion = await this.openAi.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "system", content: prompt }],
+                max_tokens: 3000,
+                temperature: 0,
+                top_p: 1,
+            });
+            return completion;
+        } catch (err) {
+            console.error('Error fetching OpenAI prompt: ', err);
+            throw err;
+        }
+    }
+
+    async generateUnsplashImage(query) {
         const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${config.API.UNSPLASH}`;
         try {
             const response = await fetch(url);
@@ -53,7 +93,7 @@ class APIModel {
             console.error('Error fetching Unsplash API:', err);
             throw err;
         }
-      }
+    }
 
 }
 

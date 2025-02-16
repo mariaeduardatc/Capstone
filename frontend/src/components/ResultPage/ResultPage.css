@@ -38,6 +38,7 @@
         color: var(--main-blue-ligth);
         margin-left: auto;
         font-size: 25px;
+        z-index: 5;
     }
 
     .columnHeader {
@@ -67,14 +68,36 @@
     }
 }
 
+#addPlace{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    input{
+        width: 80%;
+        margin-bottom: 1vh;
+    }
+
+    button{
+        background-color: transparent;
+    }
+
+    #buttons{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10%;
+    }
+}
+
 .dirButton{
     background-color: var(--main-blue-ligth);
     color: black;
     align-self: center;
-    margin-top: 20px;
+    margin: 20px 0px;
     padding: 0.5rem 1rem;
     font-size: small;
-    margin: 0;
     border: solid black;
     border-width: 1px 4px 4px 1px;
     border-radius: 10px;
@@ -162,6 +185,7 @@
     text-align:left;
     display: flex;
     flex-direction: column;
+
     button{
         background-color: var(--main-blue-ligth);
         align-self: center;
@@ -170,5 +194,28 @@
         border: solid black;
         border-width: 1px 4px 4px 1px;
         border-radius: 10px;
+    }
+}
+
+.loadingSpinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }

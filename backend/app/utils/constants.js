@@ -25,4 +25,10 @@ const TRIP_PROMPT = `Give me a list of places to visit in {city}, for a {tripPar
 
   `
 
-module.exports = { TRIP_PROMPT };
+const VISIT_DUR_PROMPT = `Give me in a couple sentences how long should one spend visiting 
+{placeName} at {cityName}. Do not use bullet points, give the answer on a paragraph format.`
+
+const VISIT_BEST_TIME_PROMPT = `Give me in a couple sentences when in the day should one spend visiting 
+{placeName} at {cityName}. Do not use bullet points, give the answer on a paragraph format.`
+
+module.exports = { TRIP_PROMPT, VISIT_DUR_PROMPT, VISIT_BEST_TIME_PROMPT };
