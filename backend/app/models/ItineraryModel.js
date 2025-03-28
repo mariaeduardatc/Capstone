@@ -1,11 +1,11 @@
-const {itineraryDbClient} = require('../../database/db')
+const {dbClient} = require('../../database/db')
 
 class ItineraryModel {
     async saveItinerary(creds) {
 
         const { user_id, saved_itinerary, number_of_days, city_name, image_url } = creds;
 
-        const result = await itineraryDbClient.query(
+        const result = await dbClient.query(
             `INSERT INTO itinerary (
             user_id,
             saved_itinerary,
@@ -38,7 +38,7 @@ class ItineraryModel {
     }
 
     async getItineraryById(userId) {
-        const result = await itineraryDbClient.query(
+        const result = await dbClient.query(
             `SELECT id,
             user_id,
             saved_itinerary,

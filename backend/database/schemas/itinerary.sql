@@ -5,5 +5,6 @@ CREATE TABLE itinerary
     saved_itinerary JSON NOT NULL,
     number_of_days INTEGER,
     city_name VARCHAR(255),
-    image_url TEXT
+    image_url TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
