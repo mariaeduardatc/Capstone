@@ -22,13 +22,13 @@ function Result() {
     const location = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated } = useContext(AuthenticatedUserContext);
-    // const { setIsLoading } = useContext(LoadingContext);
     const [isLoading, setIsLoading] = useState(false);
 
     const itinerary = typeof location.state.response === 'string'
         ? JSON.parse(location.state.response)
         : location.state.response;
     const destinationCity = location.state && location.state.city;
+    const typeTrip = location.state && location.state.type_trip;
     const numberDays = location.state && location.state.days;
     const hasResponseData = itinerary && Object.keys(itinerary).length > 0;
 
@@ -220,7 +220,8 @@ function Result() {
                 saved_itinerary: itinerary,
                 number_of_days: numberDays,
                 city_name: destinationCity,
-                image_url: cityImageUrl,
+                type_trip: typeTrip,
+                image_url: cityImageUrl
             };
 
             const itineraryCall = await postAPICallItinerary(input);

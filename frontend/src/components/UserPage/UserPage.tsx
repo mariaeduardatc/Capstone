@@ -33,7 +33,7 @@ export default function UserPage() {
                 setDbItineraries(response.body);
             }
         } catch {
-            console.log("error getting itineraries")
+            console.log("Error getting itineraries")
         }
     }
 
@@ -50,11 +50,10 @@ export default function UserPage() {
             <div className='card' key={dbItineraries[+key].id}
                 onClick={() => handleItineraryClick(dbItineraries[+key].saved_itinerary, dbItineraries[+key].city_name, dbItineraries[+key].number_of_days)}>
                 <img src={dbItineraries[+key].image_url} alt="image of trip city" />
-                <div id='intineraryInfo'>
-                    <h4>{dbItineraries[+key].city_name?.length >= 20 ? truncate(dbItineraries[+key].city_name) : (dbItineraries[+key].city_name)}</h4>
-                    <div>
-                        <h4>{dbItineraries[+key].number_of_days} Days Trip</h4>
-                    </div>
+                <div>
+                    <h4>Trip to {dbItineraries[+key].city_name?.length >= 20 ? truncate(dbItineraries[+key].city_name) : (dbItineraries[+key].city_name)}</h4>
+                    <br />
+                    <h4 id='lightText'>{dbItineraries[+key].number_of_days} Days Trip | {dbItineraries[+key].type_trip}</h4>
                 </div>
             </div>
         ))
