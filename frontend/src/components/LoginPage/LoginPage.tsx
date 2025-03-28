@@ -20,11 +20,9 @@ export default function LoginPage() {
 
     const handleInput = (e: { target: { name: string; value: string } }) => {
         if (e.target.name === "email") {
-            if (e.target.value.indexOf("@") === -1) {
-                toast.error("Please enter a valid email.");
-            } else {
-                setErrors((e) => ({ ...e, email: null }));
-            }
+
+            setErrors((e) => ({ ...e, email: null }));
+
         }
         const { name, value } = e.target;
         setInput((prevUser) => ({
@@ -32,6 +30,12 @@ export default function LoginPage() {
             [name]: value,
         }));
     };
+    const validateEmail = () => {
+        if (!/\S+@\S+\.\S+/.test(input.email)) {
+            toast.error("Please enter a valid email.");
+        }
+    };
+
 
     async function postAPICall(info: object): Promise<ApiResponse> {
         const apiClient = new APIClient();
@@ -92,7 +96,8 @@ export default function LoginPage() {
                             <input type='email'
                                 placeholder="Email"
                                 name="email"
-                                onChange={handleInput} />
+                                onChange={handleInput}
+                                onBlur={validateEmail} />
                             <input type="password"
                                 placeholder="Password"
                                 name="password"

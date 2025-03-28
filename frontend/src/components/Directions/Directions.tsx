@@ -28,7 +28,6 @@ export default function Directions() {
                     <DirectionsRoute setPosition={setPosition}/>
                 </Map>
             </APIProvider>
-
         </div>
     )
 }
@@ -43,8 +42,7 @@ function DirectionsRoute({ setPosition }: { setPosition: (pos: { lat: number, ln
     const [routes, setRoutes] = useState<google.maps.DirectionsRoute[]>([])
 
     const selected = routes[0]
-    const leg = selected?.legs[0]
-
+    
     const location = useLocation();
     const places = location.state?.places || [];
     const destinationCity = location.state?.destinationCity || '';
@@ -88,14 +86,43 @@ function DirectionsRoute({ setPosition }: { setPosition: (pos: { lat: number, ln
         }
     }, [directionsService, directionsRenderer])
 
-    if (!leg) return null
+    if (!selected) return null
+
+    // Calculate total duration and distance
+    const totalDuration = selected.legs.reduce((acc, leg) => acc + (leg.duration?.value || 0), 0);
+    const totalDistance = selected.legs.reduce((acc, leg) => acc + (leg.distance?.value || 0), 0);
+
+    // Convert to human-readable format
+    const formatDuration = (seconds: number) => {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        
+        if (hours > 0) {
+            return `${hours} hr ${minutes} min`;
+        }
+        return `${minutes} min`;
+    };
+
+    const formatDistance = (meters: number) => {
+        const km = meters / 1000;
+        return km >= 1 ? `${km.toFixed(1)} km` : `${meters} m`;
+    };
 
     return (
         <div className='directions'>
-            <p>{leg.start_address.split(",")[0]} to {leg.end_address.split(",")[0]}</p>
-            <p>Distance: {leg.distance?.text}</p>
-            <p>Duration: {leg.duration?.text}</p>
+            <h3>Total Journey: {formatDuration(totalDuration)} ({formatDistance(totalDistance)})</h3>
+            
+            {/* Individual leg details */}
+            <div className="leg-details">
+                {selected.legs.map((leg, index) => (
+                    <div key={index} className="leg">
+                        <p className="leg-title">
+                            <strong>Segment {index + 1}:</strong> {leg.start_address.split(",")[0]} → {leg.end_address.split(",")[0]}
+                        </p>
+                        <p className="leg-info">Duration: {leg.duration?.text} | Distance: {leg.distance?.text}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     )
-
 }

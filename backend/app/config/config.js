@@ -117,7 +117,6 @@ const DB_NAME = (() => {
   }
 })();
 
-const DB_URI_USER = process.env.USER_DB_URI || "";
 const DB_URI_ITINERARY = process.env.ITINERARY_DB_URI || "";
 
 // ----- API Keys/Secrets/Tokens -----
@@ -143,7 +142,6 @@ const DB = {
   PASS: DB_PASS,
   HOST: DB_HOST,
   PORT: DB_PORT,
-  URI_USER: DB_URI_USER,
   URI_ITINERARY: DB_URI_ITINERARY,
 };
 
