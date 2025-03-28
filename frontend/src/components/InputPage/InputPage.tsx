@@ -46,7 +46,7 @@ export default function InputPage() {
 
             if (res?.body) {
                 setIsLoading(false);
-                navigate("/result", { state: { response: res.body, city: tripDetails.city, days: tripDetails.duration } });
+                navigate("/result", { state: { response: res.body, city: tripDetails.city, days: tripDetails.duration, type_trip:tripDetails.typeTrip } });
             }
 
         } catch (err: any) {

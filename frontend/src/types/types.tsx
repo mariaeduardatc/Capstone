@@ -55,6 +55,7 @@ export interface SavedItineraries{
     user_id: string;
     saved_itinerary: object;
     number_of_days: string;
+    type_trip: string;
     image_url: string;
     city_name: string;
 }

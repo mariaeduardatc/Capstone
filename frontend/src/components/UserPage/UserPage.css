@@ -50,7 +50,7 @@
 #userpage .cardDeck {
     margin-bottom: 0;
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto;
     grid-template-rows: auto auto;
     align-content: center;
     justify-content: center;
@@ -58,14 +58,16 @@
 }
 
 #userpageDeck .card {
-    background-color: white;
-    width: 100%;
+    background-color: rgba(167, 195, 221, 0.2);
+    width: 25vw;
+    height: 40vh;
     border: solid var(--blue-dark);
     border-width: 0px 4px 4px 0px;
     display: flex;
     flex-direction: column;
     align-items: baseline;
     margin: auto;
+    padding: 1rem;
 
     h5 {
         color: rgba(0, 0, 0, 0.52);
@@ -76,5 +78,9 @@
         border-radius: 10px;
         height: 50%;
         object-fit: cover;
+    }
+
+    #lightText{
+        color: rgba(0, 0, 0, 0.52);
     }
 }

@@ -6,5 +6,6 @@ CREATE TABLE itinerary
     number_of_days INTEGER,
     city_name VARCHAR(255),
     image_url TEXT,
+    type_trip VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
