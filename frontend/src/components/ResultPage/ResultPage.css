@@ -5,6 +5,16 @@
     align-items: center;
     color: black;
     flex-grow: 4;
+
+    .darkButton {
+        color: white;
+        background-color: var(--blue-dark);
+        padding: 0.5rem 1rem;
+        border: solid black;
+        margin-right: 2rem;
+        border-width: 1px 4px 4px 1px;
+        border-radius: 10px;
+    }
 }
 
 .resultBlock {
@@ -31,7 +41,7 @@
     flex-direction: column;
     align-items: center;
 
-    .smallButton{
+    .smallButton {
         border: 0;
         padding: 0;
         background-color: transparent;
@@ -68,22 +78,22 @@
     }
 }
 
-#addPlace{
+#addPlace {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    input{
+    input {
         width: 80%;
         margin-bottom: 1vh;
     }
 
-    button{
+    button {
         background-color: transparent;
     }
 
-    #buttons{
+    #buttons {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -91,7 +101,7 @@
     }
 }
 
-.dirButton{
+.dirButton {
     background-color: var(--main-blue-ligth);
     color: black;
     align-self: center;
@@ -101,6 +111,12 @@
     border: solid black;
     border-width: 1px 4px 4px 1px;
     border-radius: 10px;
+}
+
+#darkButton {
+    background-color: var(--blue-dark);
+    color: white;
+    margin-top: 0;
 }
 
 .droppableCol {
@@ -118,8 +134,8 @@
     display: flex;
     align-items: center;
 
-    h4{
-        width: 100%; 
+    h4 {
+        width: 100%;
     }
 }
 
@@ -172,8 +188,9 @@
 
 .modalImg {
     width: 100%;
-    img{
-        object-fit:cover;
+
+    img {
+        object-fit: cover;
         width: 100%;
         height: 20vh;
         opacity: 0.7;
@@ -181,12 +198,12 @@
 }
 
 
-.modalText{
-    text-align:left;
+.modalText {
+    text-align: left;
     display: flex;
     flex-direction: column;
 
-    button{
+    button {
         background-color: var(--main-blue-ligth);
         align-self: center;
         margin-top: 20px;
