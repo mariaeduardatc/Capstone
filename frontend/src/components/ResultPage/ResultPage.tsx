@@ -202,7 +202,6 @@ function Result() {
         }
     };
 
-
     const handleSaveIntinerary = async (isAuthenticated: any) => {
         const userId = isAuthenticated.id;
         let cityImageUrl = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg ";
@@ -233,6 +232,29 @@ function Result() {
             console.log('Error posting itinerary');
         }
     };
+
+    const handleAddNewDay = () => {
+        const newDayKey = `day${Object.keys(state).length + 1}`; // new unique key for the day
+        const newDayData = {
+            title: `Day ${Object.keys(state).length + 1}`,  // title for the new day
+            places: [], // start with an empty list of places
+        };
+
+        setState(prevState => ({
+            ...prevState,
+            [newDayKey]: newDayData,
+        }));
+        toast.success("New day added to itinerary");
+    };
+
+    const handleDeleteDay = (key: string) => {
+        setState(prevState => {
+            const newState = { ...prevState };
+            delete newState[key];  // delete the day from the state
+            return newState;
+        });
+    };
+
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -342,13 +364,19 @@ function Result() {
                                     </div>
                                 )}
                                 <button onClick={() => handleMapsDirections(key)} className='dirButton'>Generate directions</button>
+                                <button onClick={() => handleDeleteDay(key)} className='dirButton' id='darkButton'>
+                                    Delete Day
+                                </button>
                             </div>
                         ))}
                     </DragDropContext>
                 </div>
             )}
 
-            {saveBody}
+            <div>
+                <button className='darkButton' onClick={handleAddNewDay}>New Day</button>
+                {saveBody}
+            </div>
 
             {/* Modal */}
             {isModalOpen && (
@@ -365,8 +393,8 @@ function Result() {
                                     {imageURL && (<img src={imageURL[0]?.urls.regular} />)}
                                 </div>
                                 <div className='modalText'>
-                                    <p>{modalContent.summary}</p> <br/>
-                                    <p><b>What is the best time to visit?</b> {modalContent.bestTime}</p> <br/>
+                                    <p>{modalContent.summary}</p> <br />
+                                    <p><b>What is the best time to visit?</b> {modalContent.bestTime}</p> <br />
                                     <p><b>How long should you spend here?</b> {modalContent.visitDuration}</p>
                                     <button onClick={closeModal}>Close</button>
                                 </div>
