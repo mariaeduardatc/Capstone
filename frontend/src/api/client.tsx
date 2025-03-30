@@ -1,8 +1,8 @@
-const BASE_API_URL = 'http://localhost:3000'
+const BASE_API_URL = 'capstone-production-316a.up.railway.app'
 
 class APIClient {
 
-  constructor(private readonly base_url: string = 'http://localhost:3000') {
+  constructor(private readonly base_url: string = 'capstone-production-316a.up.railway.app') {
     this.base_url = BASE_API_URL;
   }
 
