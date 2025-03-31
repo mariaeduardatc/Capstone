@@ -3,6 +3,7 @@ const BASE_API_URL = 'https://capstone-production-316a.up.railway.app'
 class APIClient {
 
   constructor(private readonly base_url: string = 'https://capstone-production-316a.up.railway.app') {
+
     this.base_url = BASE_API_URL;
   }
 
