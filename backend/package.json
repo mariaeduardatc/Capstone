@@ -8,8 +8,7 @@
     "test:watch": "jest --watch",
     "test:debug": "jest --detectOpenHandles",
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "postbuild": "node init-db.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",

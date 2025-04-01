@@ -26,19 +26,19 @@ app.use('/userpage', authenticationMiddleware.authenticateRequest, (req, res) =>
   res.json({ message: 'You have access to the protected route' });
 });
 
-app.get('/', (req, res) => {
-  res.send('Server is running');
-});
+// app.get('/', (req, res) => {
+//   res.send('Server is running');
+// });
 
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
+// app.get('/health', (req, res) => {
+//   res.status(200).send('OK');
+// });
 
 
-process.on('SIGTERM', () => {
-  console.log('Process terminated');
-  process.exit(0);
-});
+// process.on('SIGTERM', () => {
+//   console.log('Process terminated');
+//   process.exit(0);
+// });
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
