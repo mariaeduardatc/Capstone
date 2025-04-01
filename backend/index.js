@@ -7,7 +7,7 @@ const ItineraryRouter = require('./app/routers/ItineraryRouters')
 const authenticationMiddleware = require('./app/middlewares/authMiddleware')
 
 const app = express();
-const port =  3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
+
 
 process.on('SIGTERM', () => {
   console.log('Process terminated');
