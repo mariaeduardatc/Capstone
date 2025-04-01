@@ -51,7 +51,7 @@ async function seedDatabase() {
       ((SELECT id FROM famousCities WHERE name = 'paris'), 'Île de la Cité'),
       ((SELECT id FROM famousCities WHERE name = 'paris'), 'Sainte-Chapelle'),
       ((SELECT id FROM famousCities WHERE name = 'paris'), 'Seine River Cruise'),
-      ((SELECT id FROM famousCities WHERE name = 'paris'), 'Pantheon'),
+      ((SELECT id FROM famousCities WHERE name = 'paris'), 'Pantheon Paris'),
       ((SELECT id FROM famousCities WHERE name = 'paris'), 'Luxembourg Gardens'),
       ((SELECT id FROM famousCities WHERE name = 'paris'), 'Montmartre'),
       ((SELECT id FROM famousCities WHERE name = 'paris'), 'Centre Pompidou'),
