@@ -7,7 +7,7 @@ const ItineraryRouter = require('./app/routers/ItineraryRouters')
 const authenticationMiddleware = require('./app/middlewares/authMiddleware')
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port =  3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
