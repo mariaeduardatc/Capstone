@@ -34,7 +34,6 @@ app.use('/userpage', authenticationMiddleware.authenticateRequest, (req, res) =>
 //   res.status(200).send('OK');
 // });
 
-
 // process.on('SIGTERM', () => {
 //   console.log('Process terminated');
 //   process.exit(0);
