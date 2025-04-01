@@ -7,7 +7,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:debug": "jest --detectOpenHandles",
-    "start": "node init-db.js && node index.js",
+    "postinstall": "node init-db.js",
+    "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],
