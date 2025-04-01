@@ -21,8 +21,9 @@ dbClient.connect((err) => {
 });
 
 async function seedDatabase() {
-  await client.connect();
-  await client.query(`
+
+  await dbClient.connect();
+  await dbClient.query(`
     INSERT INTO famousCities (name) VALUES
     ('paris'),
     ('london'),
@@ -170,10 +171,10 @@ async function seedDatabase() {
       ((SELECT id FROM famousCities WHERE name = 'dubai'), 'Mall of the Emirates'),
       ((SELECT id FROM famousCities WHERE name = 'dubai'), 'Riyadh Street Market');
     `;
-  await client.query(insertCityPlacesQuery);
+  await dbClient.query(insertCityPlacesQuery);
   console.log("cityPlaces data inserted successfully.");
   console.log("Database seeded successfully.");
-  await client.end();
+  await dbClient.end();
 }
 
 seedDatabase().catch(console.error);
