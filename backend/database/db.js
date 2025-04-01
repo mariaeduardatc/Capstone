@@ -21,6 +21,7 @@ dbClient.connect((err) => {
 });
 
 async function seedDatabase() {
+
   await dbClient.connect();
   await dbClient.query(`
     INSERT INTO famousCities (name) VALUES
