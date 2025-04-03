@@ -8,7 +8,8 @@ INSERT INTO famousCities (name) VALUES
 ('dubai'),
 ('singapore'),
 ('bangkok'),
-('istanbul');
+('istanbul'),
+('testCity');
 
 INSERT INTO cityPlaces (city_id, name) VALUES
 -- Paris
