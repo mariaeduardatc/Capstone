@@ -9,7 +9,8 @@ INSERT INTO famousCities (name) VALUES
 ('singapore'),
 ('bangkok'),
 ('istanbul'),
-('testCity');
+('testCity')
+ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO cityPlaces (city_id, name) VALUES
 -- Paris
@@ -155,4 +156,5 @@ INSERT INTO cityPlaces (city_id, name) VALUES
 ((SELECT id FROM famousCities WHERE name = 'dubai'), 'Ski Dubai'),
 ((SELECT id FROM famousCities WHERE name = 'dubai'), 'Atlantis The Palm'),
 ((SELECT id FROM famousCities WHERE name = 'dubai'), 'Mall of the Emirates'),
-((SELECT id FROM famousCities WHERE name = 'dubai'), 'Riyadh Street Market');
+((SELECT id FROM famousCities WHERE name = 'dubai'), 'Riyadh Street Market')
+ON CONFLICT (name) DO NOTHING;
