@@ -181,6 +181,7 @@ async function seedDatabase() {
 
   // await dbClient.query(insertCityPlacesQuery);
   // console.log("cityPlaces data inserted successfully.");
+
   console.log("Database seeded successfully.");
 }
 
