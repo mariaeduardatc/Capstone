@@ -25,7 +25,7 @@ dbClient.connect((err) => {
 async function seedDatabase() {
 
   await dbClient.connect();
-  const sqlFilePath = path.join(__dirname, 'populate_cities.sql');
+  const sqlFilePath = path.join(__dirname, 'scripts', 'populate_cities.sql');
   const sqlQuery = fs.readFileSync(sqlFilePath, 'utf8');
   await dbClient.query(sqlQuery);
 
