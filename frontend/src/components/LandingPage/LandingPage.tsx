@@ -5,6 +5,10 @@ import settings from '../../assets/settings.svg'
 import smallPlane from '../../assets/smallPlane.svg'
 import diskette from '../../assets/diskette.png'
 import visuals from '../../assets/visuals.svg'
+import buttonPlane from '../../assets/buttonPlane.svg'
+import instructionPlane from '../../assets/instructionPlane.svg'
+import savejourPlane from '../../assets/savejourPlane.svg'
+import savejourPlane2 from '../../assets/savejourPlane2.svg'
 import { useNavigate } from 'react-router-dom'
 
 function LandingPage() {
@@ -21,6 +25,7 @@ function LandingPage() {
                     <h1>See what <br /> good traveling <br />can do</h1>
                     <button onClick={handleInput}>Start Planning</button>
                 </div>
+                <img src={buttonPlane} alt="white plane icon with dashed line as its path" id='buttonPlane'/>
                 <div>
                     <img src={planeIcon} alt="plane icon with plane windows on the background" />
                 </div>
@@ -29,6 +34,7 @@ function LandingPage() {
             <div className='triplePattern'>
                 <h4>Create your Itinerary</h4>
                 <h2>How to get started on your journey</h2>
+                <img src={instructionPlane} alt="white plane icon with dashed line as its path" id='instructionPlane'/>
                 <div className='cardDeck'>
                     <div className='card'>
                         <img src={smallPlane} alt="small blue plane icon" />
@@ -50,6 +56,8 @@ function LandingPage() {
             <div className='triplePattern' id='saveItinerary'>
                 <h4>Create your account</h4>
                 <h2>Save your journeys for easy access</h2>
+                <img src={savejourPlane} alt="white plane icon with dashed line as its path" id='savejourPlane'/>
+                <img src={savejourPlane2} alt="white plane icon with dashed line as its path" id='savejourPlane2'/>
                 <img src={visuals} alt="visual showing how to edit itinerary" />
             </div>
         </div>

@@ -110,6 +110,32 @@
 
 #saveItinerary{
     img{
-        width: 75vw;
+        width: 60vw;
     }
+
+    #savejourPlane{
+        width: fit-content;
+        position: absolute;
+        right: 0;
+        bottom: -97vh;
+    }
+
+    #savejourPlane2{
+        width: fit-content;
+        position: absolute;
+        bottom: -140vh;
+        left: 10vw;
+    }
+}
+
+#buttonPlane{
+    position: absolute;
+    top: 52vh;
+    left: 13vw;
+}
+
+#instructionPlane{
+    position: absolute;
+    top: 73vh;
+    left: 67vw;
 }
