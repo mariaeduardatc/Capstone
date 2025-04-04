@@ -16,7 +16,6 @@ class APIController {
 
         if (famousCity){
             const places = await this.cityModel.getPlacesByCity(cityName, numberDays);
-            console.log('places', places)
 
             if (places.length > 0) {
                 // construct the itinerary and return it

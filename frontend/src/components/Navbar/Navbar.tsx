@@ -21,7 +21,7 @@ export default function Navbar() {
         <>
             <div className='icon'>
                 <Link to='/'>
-                    <img src={icon} alt="logo" />
+                    <img src={icon} alt="website logo in white letters saying Pathaway" />
                 </Link>
             </div>
             <div className='instructionButtons'>
@@ -37,7 +37,7 @@ export default function Navbar() {
         <>
             <div className='icon'>
                 <Link to='/'>
-                    <img src={icon} alt="logo" />
+                    <img src={icon} alt="website logo in white letters saying Pathaway" />
                 </Link>
             </div>
             <div className='instructionButtons'>

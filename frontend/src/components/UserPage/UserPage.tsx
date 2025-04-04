@@ -49,7 +49,7 @@ export default function UserPage() {
         Object.keys(dbItineraries).map((key) => (
             <div className='card' key={dbItineraries[+key].id}
                 onClick={() => handleItineraryClick(dbItineraries[+key].saved_itinerary, dbItineraries[+key].city_name, dbItineraries[+key].number_of_days)}>
-                <img src={dbItineraries[+key].image_url} alt="image of trip city" />
+                <img src={dbItineraries[+key].image_url} alt={"image of trip city ${dbItineraries[+key].city_name}"}/>
                 <div>
                     <h4>Trip to {dbItineraries[+key].city_name?.length >= 20 ? truncate(dbItineraries[+key].city_name) : (dbItineraries[+key].city_name)}</h4>
                     <br />

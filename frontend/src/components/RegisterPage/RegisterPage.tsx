@@ -99,7 +99,7 @@ export default function RegisterPage() {
       <div id="registerPage">
         <div className="promptContainer">
           <div className='promptContainerImg' id='promptContainerImgRegister'>
-            <img src={loginPlane} alt="" />
+            <img src={loginPlane} alt="blue plane with blue finger digital on the background" />
             <h2>Welcome aboard</h2>
             <p>just a couple of clicks and we start our journey</p>
           </div>

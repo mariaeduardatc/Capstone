@@ -29,10 +29,11 @@
 
         button {
             background-color: white;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 15px;
             border: solid black;
             border-width: 0px 4px 4px 0px;
+            font-weight: 700;
         }
     }
 
@@ -87,7 +88,7 @@
 
     margin: 3rem;
     padding: 2rem;
-    height: 40vh;
+    height: 50vh;
     width: 20%;
     border-radius: 20px;
     gap: 2rem;
@@ -102,10 +103,13 @@
     }
 }
 
-#destinations {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3.5rem;
-    margin: 3rem;
+#disk{
+    width: 75px;
+    margin: 25px 0px;
+}
+
+#saveItinerary{
+    img{
+        width: 75vw;
+    }
 }
