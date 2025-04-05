@@ -16,19 +16,16 @@ class APIController {
 
         if (famousCity){
             const places = await this.cityModel.getPlacesByCity(cityName, numberDays);
-            console.log('places', places)
 
             if (places.length > 0) {
                 // construct the itinerary and return it
                 const itinerary = this.cityModel.constructItinerary(places);
-                console.log('test',itinerary);
                 return res.status(200).send(itinerary);
             } else {
                 return res.status(404).send({ error: "No places found for this city in the database." });
             }
             
         } else {
-            console.log('using gpt')
             const completionResponse = await this.apiModel.generateChatPrompt(tripParams);
             const completionOutput = completionResponse?.choices[0].message.content;
             res.status(200).send(completionOutput);

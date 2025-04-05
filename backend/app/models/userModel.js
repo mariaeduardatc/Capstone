@@ -13,7 +13,7 @@ class User {
     const passObj = await this.fetchUserHashedPassword(creds.email);
     await this.verifyPassword(creds.password, passObj.password);
     const userObj = await this.retrieveUserObjByEmail(creds.email);
-    return userObj; // You can return user object or any info you need
+    return userObj;
   }
 
   async register(creds) {

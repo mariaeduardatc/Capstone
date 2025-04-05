@@ -73,7 +73,7 @@ export default function InputPage() {
             <ToastContainer position="top-right" autoClose={6000} hideProgressBar={false} />
             <div id='inputPage'>
                 <div className='promptContainer'>
-                    <img src={promptImage} alt="" />
+                    <img src={promptImage} alt="image of plane flying over snowy mountains" />
                     <div className='prompt'>
                         <h1>Where are you going?</h1>
                         <form onSubmit={getItinerary} >
@@ -86,7 +86,7 @@ export default function InputPage() {
                                 placeholder="number of days"
                                 name="duration"
                                 min="1"
-                                max="4"
+                                max="10"
                                 step="1"
                                 value={tripDetails.duration}
                                 onChange={handleTripDetails} />
